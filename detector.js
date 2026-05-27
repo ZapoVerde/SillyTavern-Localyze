@@ -74,6 +74,7 @@ async function dispatch(prompt, profileId, label, extraOptions = {}) {
     let result;
     if (profileId) {
         try {
+            window.loggeryze?.tagNext('VLZ');
             result = await ConnectionManagerRequestService.sendRequest(profileId, prompt, null, extraOptions);
         } catch (err) {
             warn(label, `ConnectionManager failed for profile "${profileId}" — falling back to main chat LLM:`, err);
@@ -82,14 +83,16 @@ async function dispatch(prompt, profileId, label, extraOptions = {}) {
 
     if (!result) {
         try {
+            window.loggeryze?.tagNext('VLZ');
             result = await generateQuietPrompt({
                 quietPrompt: prompt,
                 removeReasoning: true,
                 ...extraOptions
             });
         } catch (err) {
-            error(label, 'generateQuietPrompt failed:', err);
-            throw err;
+            const msg = `[${label}] generateQuietPrompt failed (${connectionNote}): ${err.message}`;
+            error(label, msg, err);
+            throw new Error(msg, { cause: err });
         }
     }
 
@@ -117,10 +120,8 @@ export async function detectBoolean(messageText, currentLocation, historyText, p
 
     // Heuristic: Use Word-Boundary Regex to find YES or NO anywhere in the string
     const hasYes = /\bYES\b/.test(cleanText);
-    const hasNo  = /\bNO\b/.test(cleanText);
 
-    // Prioritize YES if both exist, otherwise default to NO (false)
-    const result = hasYes && !cleanText.includes("NOT YES"); // Basic negation check
+    const result = hasYes && !cleanText.includes("NOT YES");
     
     log('Boolean', `Result interpreted as: ${result ? 'YES (Changed)' : 'NO (Same)'}`);
     return result;
