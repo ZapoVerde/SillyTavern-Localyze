@@ -66,8 +66,7 @@ export const DEFAULT_AUTO_DETECT_ENABLED = true
 export const DEFAULT_AUTO_ACCEPT_LOCATION = false
 export const DEFAULT_AUTO_ACCEPT_DESCRIPTION = false
 
-// BRANCH-ONLY: Remove when merging fix/reasoning-strip-empty-response.
-/** Re-run badge — shows a ? icon on message badges to manually re-trigger the full pipeline. Troubleshooting only. */
+/** Re-run badge — shows a ? icon on message badges to manually re-trigger the full pipeline. */
 export const DEFAULT_RERUN_BADGE = false
 
 export const DEV_IMAGE_WIDTH  = 320

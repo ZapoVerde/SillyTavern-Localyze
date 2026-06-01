@@ -67,7 +67,6 @@ function renderBadge($mes, msgId) {
                style="opacity:0.6; padding:0 2px; cursor:pointer;"></i>`
         : '';
 
-    // BRANCH-ONLY: Remove when merging fix/reasoning-strip-empty-response.
     const rerunIcon = getMetaSettings().rerunBadge
         ? `<i class="fa-solid fa-question lz-badge-rerun"
                title="Re-run full detection pipeline"
@@ -130,7 +129,6 @@ function renderBadge($mes, msgId) {
         if (locKey) await handleEditLocation(locKey);
     });
 
-    // BRANCH-ONLY: Remove when merging fix/reasoning-strip-empty-response.
     $badge.on('click', '.lz-badge-rerun', async (e) => {
         e.stopPropagation();
         const { runPipeline } = await import('../logic/pipeline.js');

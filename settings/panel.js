@@ -115,7 +115,6 @@ function populateInputs() {
     $('#lz-auto-accept-description').prop('checked', s.autoAcceptDescription ?? false);
 
     $('#lz-verbose-logging').prop('checked', meta.verboseLogging ?? true);
-    // BRANCH-ONLY: Remove when merging fix/reasoning-strip-empty-response.
     $('#lz-rerun-badge').prop('checked', meta.rerunBadge ?? false);
 
     $('#lz-pollinations-status').text('');
@@ -261,7 +260,6 @@ function bindHandlers() {
         setVerboseLogging(val);
     });
 
-    // BRANCH-ONLY: Remove when merging fix/reasoning-strip-empty-response.
     $('#lz-settings').on('change', '#lz-rerun-badge', async function () {
         const val = $(this).prop('checked');
         updateMetaSetting('rerunBadge', val);

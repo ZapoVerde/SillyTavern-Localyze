@@ -214,7 +214,6 @@ export function initSettings() {
 
     if (typeof root.parallaxEnabled !== 'boolean') root.parallaxEnabled = DEFAULT_PARALLAX_ENABLED;
     if (typeof root.verboseLogging !== 'boolean') root.verboseLogging = DEFAULT_VERBOSE_LOGGING;
-    // BRANCH-ONLY: Remove when merging fix/reasoning-strip-empty-response.
     if (typeof root.rerunBadge !== 'boolean') root.rerunBadge = DEFAULT_RERUN_BADGE;
     if (!Array.isArray(root.knownSessions)) root.knownSessions = [];
     if (!root.auditCache) {
