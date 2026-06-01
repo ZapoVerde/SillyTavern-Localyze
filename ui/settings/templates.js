@@ -219,6 +219,14 @@ export function buildPanelHTML(meta, availableModels) {
                         </label>
                         <span style="font-size:0.78em;opacity:0.55;" data-i18n="vistalyze.settings.verbose_logging_hint">Logs pipeline steps and AI calls to the browser console</span>
                     </div>
+                    <!-- BRANCH-ONLY: Remove when merging fix/reasoning-strip-empty-response. -->
+                    <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+                        <label class="checkbox_label" style="font-size:0.85em;cursor:pointer;">
+                            <input type="checkbox" id="lz-rerun-badge" />
+                            <span>Re-run badge</span>
+                        </label>
+                        <span style="font-size:0.78em;opacity:0.55;">Shows a ? icon on each message to manually re-trigger the full detection pipeline</span>
+                    </div>
                 </div>
             </div>
         </div>

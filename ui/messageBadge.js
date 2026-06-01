@@ -24,6 +24,7 @@ import { t, translate } from '../../../../i18n.js';
 import { state } from '../state.js';
 import { escapeHtml } from '../utils/history.js';
 import { syncDraftState, handleEditLocation } from '../logic/maintenance.js';
+import { getMetaSettings } from '../settings/data.js';
 
 /**
  * Forward-scans the chat up to msgId and returns the last non-null location key.
@@ -66,6 +67,13 @@ function renderBadge($mes, msgId) {
                style="opacity:0.6; padding:0 2px; cursor:pointer;"></i>`
         : '';
 
+    // BRANCH-ONLY: Remove when merging fix/reasoning-strip-empty-response.
+    const rerunIcon = getMetaSettings().rerunBadge
+        ? `<i class="fa-solid fa-question lz-badge-rerun"
+               title="Re-run full detection pipeline"
+               style="opacity:0.6; padding:0 2px; cursor:pointer;"></i>`
+        : '';
+
     // Rendered as its own row below .ch_name so it doesn't crowd .mes_buttons on mobile
     const $badge = $(`
         <div class="lz-msg-badge"
@@ -98,6 +106,7 @@ function renderBadge($mes, msgId) {
                 <span class="lz-badge-label" style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; min-width:0;">${escapeHtml(label)}</span>
             </span>
             ${editIcon}
+            ${rerunIcon}
         </div>
     `);
 
@@ -119,6 +128,14 @@ function renderBadge($mes, msgId) {
     $badge.on('click', '.lz-badge-edit', async (e) => {
         e.stopPropagation();
         if (locKey) await handleEditLocation(locKey);
+    });
+
+    // BRANCH-ONLY: Remove when merging fix/reasoning-strip-empty-response.
+    $badge.on('click', '.lz-badge-rerun', async (e) => {
+        e.stopPropagation();
+        const { runPipeline } = await import('../logic/pipeline.js');
+        await runPipeline(msgId);
+        renderBadge($mes, msgId);
     });
 }
 

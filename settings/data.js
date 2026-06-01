@@ -43,6 +43,7 @@ import {
     DEFAULT_AUTO_ACCEPT_LOCATION,
     DEFAULT_AUTO_ACCEPT_DESCRIPTION,
     DEFAULT_VERBOSE_LOGGING,
+    DEFAULT_RERUN_BADGE,
 } from '../defaults.js';
 
 const EXT_NAME = 'vistalyze';
@@ -213,6 +214,8 @@ export function initSettings() {
 
     if (typeof root.parallaxEnabled !== 'boolean') root.parallaxEnabled = DEFAULT_PARALLAX_ENABLED;
     if (typeof root.verboseLogging !== 'boolean') root.verboseLogging = DEFAULT_VERBOSE_LOGGING;
+    // BRANCH-ONLY: Remove when merging fix/reasoning-strip-empty-response.
+    if (typeof root.rerunBadge !== 'boolean') root.rerunBadge = DEFAULT_RERUN_BADGE;
     if (!Array.isArray(root.knownSessions)) root.knownSessions = [];
     if (!root.auditCache) {
         root.auditCache = { suspects: [], lastAudit: null, orphans: [] };
