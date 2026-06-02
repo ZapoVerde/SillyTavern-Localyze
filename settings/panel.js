@@ -104,7 +104,6 @@ function populateInputs() {
     });
 
     $('#lz-image-model').val(s.imageModel ?? DEFAULT_IMAGE_MODEL);
-    $('#lz-dev-mode').prop('checked', s.devMode ?? false);
     $('#lz-parallax-enabled').prop('checked', meta.parallaxEnabled ?? false);
 
     // Auto-Detect toggle
@@ -236,14 +235,6 @@ function bindHandlers() {
         
         // Protected Update: Update active model
         updateActiveSetting('imageModel', val);
-        updateDirtyIndicator(meta);
-    });
-
-    $('#lz-settings').on('change', '#lz-dev-mode', function () {
-        const val = $(this).prop('checked');
-        
-        // Protected Update: Update boolean flag
-        updateActiveSetting('devMode', val);
         updateDirtyIndicator(meta);
     });
 

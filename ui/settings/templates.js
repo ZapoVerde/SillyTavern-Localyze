@@ -188,13 +188,6 @@ export function buildPanelHTML(meta, availableModels) {
                                 style="font-size:0.8em;padding:2px 8px;">Edit Template</button>
                             <span style="font-size:0.78em;opacity:0.55;">{{image_prompt}} {{name}} {{description}}</span>
                         </div>
-                        <div style="display:flex;align-items:center;gap:8px;">
-                            <label class="checkbox_label" style="font-size:0.85em;cursor:pointer;">
-                                <input type="checkbox" id="lz-dev-mode" />
-                                <span data-i18n="vistalyze.settings.label_dev_mode">Dev mode</span>
-                            </label>
-                            <span style="font-size:0.78em;opacity:0.55;" data-i18n="vistalyze.settings.dev_mode_hint">Generates 320×180 preview images to save credits</span>
-                        </div>
                     </div>
                 </div>
 

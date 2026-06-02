@@ -30,8 +30,6 @@ import { getSettings } from './settings/data.js'
 import {
     DEFAULT_IMAGE_MODEL,
     DEFAULT_IMAGE_PROMPT_TEMPLATE,
-    DEV_IMAGE_WIDTH,
-    DEV_IMAGE_HEIGHT,
 } from './defaults.js'
 
 function interpolateImagePrompt(template, locationDef) {
@@ -43,7 +41,6 @@ function interpolateImagePrompt(template, locationDef) {
 
 async function callPollinationsProxy(prompt, overrides = {}) {
     const s = getSettings()
-    const devMode = s.devMode ?? false
     const res = await fetch('/api/sd/pollinations/generate', {
         method: 'POST',
         headers: getRequestHeaders(),
@@ -51,8 +48,8 @@ async function callPollinationsProxy(prompt, overrides = {}) {
             prompt,
             model:           s.imageModel ?? DEFAULT_IMAGE_MODEL,
             negative_prompt: '',
-            width:           overrides.width  ?? (devMode ? DEV_IMAGE_WIDTH  : 1920),
-            height:          overrides.height ?? (devMode ? DEV_IMAGE_HEIGHT : 1080),
+            width:           overrides.width  ?? 1920,
+            height:          overrides.height ?? 1080,
             seed:            -1,
         }),
     })

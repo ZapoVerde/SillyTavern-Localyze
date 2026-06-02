@@ -13,11 +13,8 @@
  * POLLINATIONS_MODELS
  * DEFAULT_IMAGE_MODEL
  * DEFAULT_IMAGE_PROMPT_TEMPLATE
- * DEFAULT_DEV_MODE
  * DEFAULT_AUTO_ACCEPT_LOCATION
  * DEFAULT_AUTO_ACCEPT_DESCRIPTION
- * DEV_IMAGE_WIDTH
- * DEV_IMAGE_HEIGHT
  * DEFAULT_BOOLEAN_HISTORY
  * DEFAULT_CLASSIFIER_HISTORY
  * DEFAULT_DESCRIBER_HISTORY
@@ -50,9 +47,6 @@ export const DEFAULT_IMAGE_PROMPT_TEMPLATE =
 Style: Concept Art for Video Games, in the style of Frank Cho, comic book style.
 `
 
-/** Dev mode — generates recognizable but low-cost images. */
-export const DEFAULT_DEV_MODE = false
-
 /** Verbose logging — set to true to enable informational log/warn output. Errors always surface. */
 export const DEFAULT_VERBOSE_LOGGING = false
 
@@ -68,9 +62,6 @@ export const DEFAULT_AUTO_ACCEPT_DESCRIPTION = false
 
 /** Re-run badge — shows a ? icon on message badges to manually re-trigger the full pipeline. */
 export const DEFAULT_RERUN_BADGE = false
-
-export const DEV_IMAGE_WIDTH  = 320
-export const DEV_IMAGE_HEIGHT = 180
 
 /** Default turn-pair history for LLM calls. */
 export const DEFAULT_BOOLEAN_HISTORY = 2
