@@ -1,17 +1,20 @@
 /**
  * @file imageCache.js
- * @stamp {"utc":"2026-03-30T00:00:00.000Z"}
+ * @stamp {"utc":"2026-06-02T00:00:00.000Z"}
  * @architectural-role Image IO
  * @description
- * Owns all image-related IO. Refactored to use the profile-aware getSettings() 
- * accessor for prompts, models, and dev mode flags.
- * 
+ * Owns all image-related IO. Delegates Pollinations API calls to the ST SD
+ * extension proxy (/api/sd/pollinations/generate), which handles auth
+ * server-side. VLZ retains full control over filenames and upload destination.
+ *
  * @updates
- * - Migrated from direct extension_settings access to getSettings().
- * - Standardized usage of profile-level configuration.
+ * - Migrated from direct Pollinations fetch + client-side secret to ST SD proxy.
+ * - Removes allowKeysExposure requirement from config.yaml.
  *
  * @api-declaration
  * fetchPreviewBlob(prompt) → Promise<string> (Object URL)
+ * fetchFullBlob(locationDef) → Promise<string> (Object URL)
+ * uploadBlob(blobUrl, filename) → Promise<string> (filename)
  * fetchFileIndex(sessionId) → Promise<{fileIndex, allImages}>
  * generate(key, locationDef, sessionId) → Promise<string> (filename)
  *
@@ -19,23 +22,17 @@
  *   assertions:
  *     purity: IO
  *     state_ownership: []
- *     external_io: [findSecret, fetch(/api/backgrounds/all), fetch(/api/backgrounds/upload)]
+ *     external_io: [fetch(/api/sd/pollinations/generate), fetch(/api/backgrounds/all), fetch(/api/backgrounds/upload)]
  */
 
 import { getRequestHeaders } from '../../../../script.js'
-import { findSecret } from '../../../secrets.js'
 import { getSettings } from './settings/data.js'
 import {
-    POLLINATIONS_BASE_URL,
-    POLLINATIONS_APP_KEY,
     DEFAULT_IMAGE_MODEL,
     DEFAULT_IMAGE_PROMPT_TEMPLATE,
     DEV_IMAGE_WIDTH,
     DEV_IMAGE_HEIGHT,
 } from './defaults.js'
-
-/** Standard SillyTavern secret key name for Pollinations */
-const SECRET_KEY_NAME = 'api_key_pollinations'
 
 function interpolateImagePrompt(template, locationDef) {
     return template
@@ -44,75 +41,50 @@ function interpolateImagePrompt(template, locationDef) {
         .replace(/\{\{description\}\}/g,  locationDef.description ?? '')
 }
 
-function buildPollinationsUrl(finalPrompt, overrides = {}) {
+async function callPollinationsProxy(prompt, overrides = {}) {
     const s = getSettings()
     const devMode = s.devMode ?? false
-    const params = new URLSearchParams({
-        width:  overrides.width  ?? (devMode ? String(DEV_IMAGE_WIDTH)  : '1920'),
-        height: overrides.height ?? (devMode ? String(DEV_IMAGE_HEIGHT) : '1080'),
-        model:    s.imageModel ?? DEFAULT_IMAGE_MODEL,
-        nologo:   'true',
-        referrer: POLLINATIONS_APP_KEY,
+    const res = await fetch('/api/sd/pollinations/generate', {
+        method: 'POST',
+        headers: getRequestHeaders(),
+        body: JSON.stringify({
+            prompt,
+            model:           s.imageModel ?? DEFAULT_IMAGE_MODEL,
+            negative_prompt: '',
+            width:           overrides.width  ?? (devMode ? DEV_IMAGE_WIDTH  : 1920),
+            height:          overrides.height ?? (devMode ? DEV_IMAGE_HEIGHT : 1080),
+            seed:            -1,
+        }),
     })
-    return `${POLLINATIONS_BASE_URL}/image/${encodeURIComponent(finalPrompt)}?${params.toString()}`
+    if (!res.ok) {
+        const text = await res.text()
+        throw new Error(`Pollinations proxy error (${res.status}): ${text}`)
+    }
+    return res.json()
 }
 
-/**
- * Retrieves the API key using the standard ST findSecret function.
- */
-async function getAuthHeaders() {
-    const userKey = await findSecret(SECRET_KEY_NAME)
-    
-    if (!userKey) {
-        throw new Error(
-            'Pollinations API key not found or blocked.\n\n' +
-            '1. Ensure the key is set in ST API settings (Pollinations).\n' +
-            '2. In SillyTavern/config.yaml, set "allowKeysExposure: true" then restart the server.'
-        )
-    }
-    
-    return {
-        'Authorization': `Bearer ${userKey}`,
-    }
-}
-
-async function validateImageResponse(response) {
-    if (!response.ok) {
-        const text = await response.text()
-        throw new Error(`Pollinations API Error (${response.status}): ${text}`)
-    }
-    const contentType = response.headers.get('Content-Type')
-    if (!contentType || !contentType.startsWith('image/')) {
-        const text = await response.text()
-        throw new Error(`Expected image, but received ${contentType}: ${text}`)
-    }
+function base64ToBlob(base64, format) {
+    const binary = atob(base64)
+    const bytes = new Uint8Array(binary.length)
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i)
+    return new Blob([bytes], { type: `image/${format}` })
 }
 
 export async function fetchPreviewBlob(prompt) {
-    const url = buildPollinationsUrl(prompt, { width: '320', height: '180' })
-    const headers = await getAuthHeaders()
-
-    const res = await fetch(url, { headers })
-    await validateImageResponse(res)
-
-    return URL.createObjectURL(await res.blob())
+    const { image, format } = await callPollinationsProxy(prompt, { width: 320, height: 180 })
+    return URL.createObjectURL(base64ToBlob(image, format))
 }
 
 /**
- * Fetches a full-resolution image from Pollinations using the same template
- * as generate(), but returns a local blob URL instead of uploading to the server.
+ * Fetches a full-resolution image using the same template as generate(),
+ * but returns a local blob URL instead of uploading to the server.
  * The filename is assigned later, at upload time.
  */
 export async function fetchFullBlob(locationDef) {
     const template = getSettings().imagePromptTemplate ?? DEFAULT_IMAGE_PROMPT_TEMPLATE
     const finalPrompt = interpolateImagePrompt(template, locationDef)
-    const url = buildPollinationsUrl(finalPrompt)
-    const headers = await getAuthHeaders()
-
-    const res = await fetch(url, { headers })
-    await validateImageResponse(res)
-
-    return URL.createObjectURL(await res.blob())
+    const { image, format } = await callPollinationsProxy(finalPrompt)
+    return URL.createObjectURL(base64ToBlob(image, format))
 }
 
 /**
@@ -154,15 +126,9 @@ export async function generate(key, locationDef, sessionId) {
     const filename = `vistalyze_${sessionId}_${key}.png`
     const template = getSettings().imagePromptTemplate ?? DEFAULT_IMAGE_PROMPT_TEMPLATE
     const finalPrompt = interpolateImagePrompt(template, locationDef)
-    
-    const url = buildPollinationsUrl(finalPrompt)
-    const headers = await getAuthHeaders()
-    
-    const imgRes = await fetch(url, { headers })
-    await validateImageResponse(imgRes)
-    
-    const blob = await imgRes.blob()
-    const file = new File([blob], filename, { type: 'image/png' })
+
+    const { image, format } = await callPollinationsProxy(finalPrompt)
+    const file = new File([base64ToBlob(image, format)], filename, { type: 'image/png' })
 
     const formData = new FormData()
     formData.append('avatar', file)

@@ -10,8 +10,6 @@
  * - Added DEFAULT_AUTO_ACCEPT_DESCRIPTION for Gate 2 pipeline bypass.
  *
  * @api-declaration
- * POLLINATIONS_BASE_URL
- * POLLINATIONS_APP_KEY
  * POLLINATIONS_MODELS
  * DEFAULT_IMAGE_MODEL
  * DEFAULT_IMAGE_PROMPT_TEMPLATE
@@ -29,12 +27,6 @@
  * DEFAULT_DESCRIBER_PROMPT
  * DEFAULT_DISCOVERY_PROMPT
  */
-
-/** Primary API Gateway for Pollinations. */
-export const POLLINATIONS_BASE_URL = 'https://gen.pollinations.ai'
-
-/** Publishable app key — identifies Vistalyze to Pollinations for attribution. */
-export const POLLINATIONS_APP_KEY = 'pk_WfuLORZ5RZDfPRZU'
 
 /** Available Pollinations image models. */
 export const POLLINATIONS_MODELS =[

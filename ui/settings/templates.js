@@ -159,8 +159,7 @@ export function buildPanelHTML(meta, availableModels) {
                 <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--SmartThemeBorderColor,#444);">
                     <strong style="font-size:0.95em;" data-i18n="vistalyze.settings.image_gen_header">Image Generation</strong>
                     <p style="font-size:0.83em;opacity:0.65;margin:4px 0 12px;" data-i18n="vistalyze.settings.image_gen_hint">
-                        Images are generated via Pollinations. Enter your API key to securely save it to your server vault.<br/>
-                        <strong style="color:var(--SmartThemeWarningColor,#ffc107);" data-i18n="vistalyze.settings.image_gen_warning">Note:</strong> Extensions require <code>allowKeysExposure: true</code> in <code>config.yaml</code> to read this key.
+                        Images are generated via Pollinations. Enter your API key to securely save it to your server vault.
                     </p>
 
                     <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
