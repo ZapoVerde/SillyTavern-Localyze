@@ -63,26 +63,29 @@ export function buildCallRow(id, label, promptKey, profileKey, historyKey = null
         </div>` : '';
 
     return `
-    <div class="lz-call-row" style="margin-bottom:16px;padding:12px;border:1px solid var(--SmartThemeBorderColor,#555);border-radius:6px;">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-            <strong style="font-size:0.95em;">
+    <div class="inline-drawer lz-call-row" style="margin-bottom:6px;">
+        <div class="inline-drawer-toggle inline-drawer-header" style="padding:6px 12px;">
+            <span style="font-size:0.9em;font-weight:600;">
                 <span data-i18n="${i18nBase}.title">${escapeHtml(label)}</span>
-                <i class="fa-solid fa-circle-info lz-info-icon" 
+                <i class="fa-solid fa-circle-info lz-info-icon"
                    data-i18n="[title]${i18nBase}.guidance"
-                   title="${safeGuidance}" 
-                   data-guidance="${safeGuidance}" 
+                   title="${safeGuidance}"
+                   data-guidance="${safeGuidance}"
                    style="opacity:0.6; cursor:pointer; margin-left:6px;"></i>
-            </strong>
-            <button class="menu_button lz-open-prompt" data-prompt-key="${safePromptKey}" 
-                data-i18n="vistalyze.settings.btn_edit_prompt"
-                style="font-size:0.8em;padding:2px 8px;">Edit Prompt</button>
+            </span>
+            <div class="inline-drawer-icon fa-solid fa-circle-chevron-down down"></div>
         </div>
-        <div class="lz-profile-row" style="display:flex;align-items:center;gap:8px;">
-            <label style="font-size:0.85em;opacity:0.75;white-space:nowrap;" data-i18n="vistalyze.settings.label_connection">Connection:</label>
-            <select id="lz-profile-${safeId}" class="text_pole lz-step-profile-select" data-profile-key="${safeProfileKey}" style="flex:1;"></select>
+        <div class="inline-drawer-content" style="padding:10px 12px 12px;">
+            <div class="lz-profile-row" style="display:flex;align-items:center;gap:8px;">
+                <label style="font-size:0.85em;opacity:0.75;white-space:nowrap;" data-i18n="vistalyze.settings.label_connection">Connection:</label>
+                <select id="lz-profile-${safeId}" class="text_pole lz-step-profile-select" data-profile-key="${safeProfileKey}" style="flex:1;"></select>
+                <button class="menu_button lz-open-prompt" data-prompt-key="${safePromptKey}"
+                    data-i18n="vistalyze.settings.btn_edit_prompt"
+                    style="font-size:0.8em;padding:2px 8px;white-space:nowrap;">Edit Prompt</button>
+            </div>
+            ${historyRow}
+            ${extraContent}
         </div>
-        ${historyRow}
-        ${extraContent}
     </div>`;
 }
 
@@ -156,75 +159,72 @@ export function buildPanelHTML(meta, availableModels) {
                 ${buildCallRow('discovery',  'Step 4 — Targeted Discovery',            'discoveryPrompt',  'discoveryProfileId',  'discoveryHistory', creativeGuidance, 'vistalyze.settings.step4')}
                 
                 <!-- Image Generation Section -->
-                <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--SmartThemeBorderColor,#444);">
-                    <strong style="font-size:0.95em;" data-i18n="vistalyze.settings.image_gen_header">Image Generation</strong>
-                    <p style="font-size:0.83em;opacity:0.65;margin:4px 0 12px;" data-i18n="vistalyze.settings.image_gen_hint">
-                        Images are generated via Pollinations. Enter your API key to securely save it to your server vault.
-                    </p>
-
-                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
-                        <label style="font-size:0.85em;opacity:0.75;white-space:nowrap;min-width:80px;" data-i18n="vistalyze.settings.label_api_key">API Key:</label>
-                        <input type="password" id="lz-pollinations-key" class="text_pole" data-i18n="[placeholder]vistalyze.settings.placeholder_api_key" placeholder="Enter new sk_ key..." style="flex:1;" />
-                        <button class="menu_button" id="lz-pollinations-save" style="white-space:nowrap;" data-i18n="vistalyze.settings.btn_save_vault">Save to Vault</button>
+                <div class="inline-drawer lz-call-row" style="margin-bottom:6px;">
+                    <div class="inline-drawer-toggle inline-drawer-header" style="padding:6px 12px;">
+                        <span style="font-size:0.9em;font-weight:600;" data-i18n="vistalyze.settings.image_gen_header">Image Generation</span>
+                        <div class="inline-drawer-icon fa-solid fa-circle-chevron-down down"></div>
                     </div>
-                    <div id="lz-key-status-indicator" style="font-size:0.82em; margin-left:88px; margin-bottom:12px;">
-                        <span style="opacity:0.6;"><i class="fa-solid fa-spinner fa-spin"></i> <span data-i18n="vistalyze.settings.status_checking_vault">Checking vault...</span></span>
-                    </div>
-
-                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-                        <button class="menu_button" id="lz-pollinations-check" data-i18n="vistalyze.settings.btn_test_connection">Test Connection</button>
-                    </div>
-                    <div id="lz-pollinations-status" style="font-size:0.82em;opacity:0.65;margin-bottom:8px;"></div>
-
-                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-                        <label style="font-size:0.85em;opacity:0.75;white-space:nowrap;min-width:80px;" data-i18n="vistalyze.settings.label_model">Model:</label>
-                        <select id="lz-image-model" class="text_pole" style="flex:1;">
-                            ${modelOptions}
-                        </select>
-                    </div>
-
-                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-                        <label style="font-size:0.85em;opacity:0.75;white-space:nowrap;min-width:80px;" data-i18n="vistalyze.settings.label_prompt_template">Prompt:</label>
-                        <button class="menu_button lz-open-prompt" data-prompt-key="imagePromptTemplate"
-                            data-i18n="vistalyze.settings.btn_edit_template"
-                            style="font-size:0.8em;padding:2px 8px;">Edit Template</button>
-                        <span style="font-size:0.78em;opacity:0.55;">{{image_prompt}} {{name}} {{description}}</span>
-                    </div>
-
-                    <div style="display:flex;align-items:center;gap:8px;">
-                        <label class="checkbox_label" style="font-size:0.85em;cursor:pointer;">
-                            <input type="checkbox" id="lz-dev-mode" />
-                            <span data-i18n="vistalyze.settings.label_dev_mode">Dev mode</span>
-                        </label>
-                        <span style="font-size:0.78em;opacity:0.55;" data-i18n="vistalyze.settings.dev_mode_hint">Generates 320×180 preview images to save credits</span>
+                    <div class="inline-drawer-content" style="padding:10px 12px 12px;">
+                        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                            <label style="font-size:0.85em;opacity:0.75;white-space:nowrap;min-width:80px;" data-i18n="vistalyze.settings.label_api_key">API Key:</label>
+                            <input type="password" id="lz-pollinations-key" class="text_pole" data-i18n="[placeholder]vistalyze.settings.placeholder_api_key" placeholder="Enter new sk_ key..." style="flex:1;" />
+                            <button class="menu_button" id="lz-pollinations-save" style="white-space:nowrap;" data-i18n="vistalyze.settings.btn_save_vault">Save to Vault</button>
+                        </div>
+                        <div id="lz-key-status-indicator" style="font-size:0.82em;margin-left:88px;margin-bottom:8px;">
+                            <span style="opacity:0.6;"><i class="fa-solid fa-spinner fa-spin"></i> <span data-i18n="vistalyze.settings.status_checking_vault">Checking vault...</span></span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                            <label style="font-size:0.85em;opacity:0.75;white-space:nowrap;min-width:80px;" data-i18n="vistalyze.settings.label_model">Model:</label>
+                            <select id="lz-image-model" class="text_pole" style="flex:1;">
+                                ${modelOptions}
+                            </select>
+                            <button class="menu_button" id="lz-pollinations-check" style="white-space:nowrap;" data-i18n="vistalyze.settings.btn_test_connection">Test Connection</button>
+                        </div>
+                        <div id="lz-pollinations-status" style="font-size:0.82em;opacity:0.65;margin-bottom:4px;"></div>
+                        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                            <label style="font-size:0.85em;opacity:0.75;white-space:nowrap;min-width:80px;" data-i18n="vistalyze.settings.label_prompt_template">Prompt:</label>
+                            <button class="menu_button lz-open-prompt" data-prompt-key="imagePromptTemplate"
+                                data-i18n="vistalyze.settings.btn_edit_template"
+                                style="font-size:0.8em;padding:2px 8px;">Edit Template</button>
+                            <span style="font-size:0.78em;opacity:0.55;">{{image_prompt}} {{name}} {{description}}</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:8px;">
+                            <label class="checkbox_label" style="font-size:0.85em;cursor:pointer;">
+                                <input type="checkbox" id="lz-dev-mode" />
+                                <span data-i18n="vistalyze.settings.label_dev_mode">Dev mode</span>
+                            </label>
+                            <span style="font-size:0.78em;opacity:0.55;" data-i18n="vistalyze.settings.dev_mode_hint">Generates 320×180 preview images to save credits</span>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Maintenance -->
-                <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--SmartThemeBorderColor,#444);">
-                    <strong style="font-size:0.95em;" data-i18n="vistalyze.settings.maintenance_header">Maintenance</strong>
-                    <p style="font-size:0.83em;opacity:0.65;margin:4px 0 12px;" data-i18n="vistalyze.settings.maintenance_hint">
-                        Scan for background images no longer referenced by any location.
-                    </p>
-                    <div style="display:flex;align-items:center;gap:8px;">
-                        <button class="menu_button" id="lz-audit-btn">
-                            <i class="fa-solid fa-trash-can"></i> <span data-i18n="vistalyze.settings.btn_audit_images">Audit Images</span>
-                        </button>
-                        <span id="lz-orphan-badge" style="display:none;background:var(--SmartThemeErrorColor);color:white;padding:1px 6px;border-radius:10px;font-size:0.75em;"></span>
+                <div class="inline-drawer lz-call-row" style="margin-bottom:6px;">
+                    <div class="inline-drawer-toggle inline-drawer-header" style="padding:6px 12px;">
+                        <span style="font-size:0.9em;font-weight:600;" data-i18n="vistalyze.settings.maintenance_header">Maintenance</span>
+                        <div class="inline-drawer-icon fa-solid fa-circle-chevron-down down"></div>
                     </div>
-                    <div style="display:flex;align-items:center;gap:8px;margin-top:10px;">
-                        <label class="checkbox_label" style="font-size:0.85em;cursor:pointer;">
-                            <input type="checkbox" id="lz-verbose-logging" />
-                            <span data-i18n="vistalyze.settings.label_verbose_logging">Verbose logging</span>
-                        </label>
-                        <span style="font-size:0.78em;opacity:0.55;" data-i18n="vistalyze.settings.verbose_logging_hint">Logs pipeline steps and AI calls to the browser console</span>
-                    </div>
-                    <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
-                        <label class="checkbox_label" style="font-size:0.85em;cursor:pointer;">
-                            <input type="checkbox" id="lz-rerun-badge" />
-                            <span>Re-run badge</span>
-                        </label>
-                        <span style="font-size:0.78em;opacity:0.55;">Shows a ? icon on each message to manually re-trigger the full detection pipeline</span>
+                    <div class="inline-drawer-content" style="padding:10px 12px 12px;">
+                        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                            <button class="menu_button" id="lz-audit-btn">
+                                <i class="fa-solid fa-trash-can"></i> <span data-i18n="vistalyze.settings.btn_audit_images">Audit Images</span>
+                            </button>
+                            <span id="lz-orphan-badge" style="display:none;background:var(--SmartThemeErrorColor);color:white;padding:1px 6px;border-radius:10px;font-size:0.75em;"></span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+                            <label class="checkbox_label" style="font-size:0.85em;cursor:pointer;">
+                                <input type="checkbox" id="lz-verbose-logging" />
+                                <span data-i18n="vistalyze.settings.label_verbose_logging">Verbose logging</span>
+                            </label>
+                            <span style="font-size:0.78em;opacity:0.55;" data-i18n="vistalyze.settings.verbose_logging_hint">Logs pipeline steps and AI calls to the browser console</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:8px;">
+                            <label class="checkbox_label" style="font-size:0.85em;cursor:pointer;">
+                                <input type="checkbox" id="lz-rerun-badge" />
+                                <span>Re-run badge</span>
+                            </label>
+                            <span style="font-size:0.78em;opacity:0.55;">Shows a ? icon on each message to manually re-trigger the full detection pipeline</span>
+                        </div>
                     </div>
                 </div>
             </div>
