@@ -50,11 +50,6 @@ import {
 import { buildPanelHTML } from '../ui/settings/templates.js';
 import { openPromptModal } from '../ui/settings/promptModal.js';
 import { 
-    updateKeyStatusIndicator, 
-    savePollinationsKey, 
-    testPollinationsConnection 
-} from '../ui/settings/vault.js';
-import { 
     updateDirtyIndicator, 
     refreshProfileDropdown, 
     handleProfileSave, 
@@ -116,8 +111,6 @@ function populateInputs() {
     $('#lz-verbose-logging').prop('checked', meta.verboseLogging ?? true);
     $('#lz-rerun-badge').prop('checked', meta.rerunBadge ?? false);
 
-    $('#lz-pollinations-status').text('');
-    updateKeyStatusIndicator();
     refreshProfileDropdown(meta);
 }
 
@@ -222,13 +215,6 @@ function bindHandlers() {
         updateActiveSetting('autoAcceptDescription', $(this).prop('checked'));
         updateDirtyIndicator(meta);
     });
-
-    $('#lz-settings').on('click', '#lz-pollinations-save', () => {
-        savePollinationsKey($('#lz-pollinations-key').val());
-        $('#lz-pollinations-key').val('');
-    });
-
-    $('#lz-settings').on('click', '#lz-pollinations-check', () => testPollinationsConnection());
 
     $('#lz-settings').on('change', '#lz-image-model', function () {
         const val = $(this).val() || DEFAULT_IMAGE_MODEL;

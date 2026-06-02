@@ -166,22 +166,12 @@ export function buildPanelHTML(meta, availableModels) {
                     </div>
                     <div class="inline-drawer-content" style="padding:10px 12px 12px;">
                         <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
-                            <label style="font-size:0.85em;opacity:0.75;white-space:nowrap;min-width:80px;" data-i18n="vistalyze.settings.label_api_key">API Key:</label>
-                            <input type="password" id="lz-pollinations-key" class="text_pole" data-i18n="[placeholder]vistalyze.settings.placeholder_api_key" placeholder="Enter new sk_ key..." style="flex:1;" />
-                            <button class="menu_button" id="lz-pollinations-save" style="white-space:nowrap;" data-i18n="vistalyze.settings.btn_save_vault">Save to Vault</button>
-                        </div>
-                        <div id="lz-key-status-indicator" style="font-size:0.82em;margin-left:88px;margin-bottom:8px;">
-                            <span style="opacity:0.6;"><i class="fa-solid fa-spinner fa-spin"></i> <span data-i18n="vistalyze.settings.status_checking_vault">Checking vault...</span></span>
-                        </div>
-                        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
                             <label style="font-size:0.85em;opacity:0.75;white-space:nowrap;min-width:80px;" data-i18n="vistalyze.settings.label_model">Model:</label>
                             <select id="lz-image-model" class="text_pole" style="flex:1;">
                                 ${modelOptions}
                             </select>
-                            <button class="menu_button" id="lz-pollinations-check" style="white-space:nowrap;" data-i18n="vistalyze.settings.btn_test_connection">Test Connection</button>
                         </div>
-                        <div id="lz-pollinations-status" style="font-size:0.82em;opacity:0.65;margin-bottom:4px;"></div>
-                        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                        <div style="display:flex;align-items:center;gap:8px;">
                             <label style="font-size:0.85em;opacity:0.75;white-space:nowrap;min-width:80px;" data-i18n="vistalyze.settings.label_prompt_template">Prompt:</label>
                             <button class="menu_button lz-open-prompt" data-prompt-key="imagePromptTemplate"
                                 data-i18n="vistalyze.settings.btn_edit_template"
