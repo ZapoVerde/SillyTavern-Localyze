@@ -166,6 +166,10 @@ export function buildPanelHTML(meta) {
                                 data-i18n="vistalyze.settings.btn_edit_template">Edit Template</button>
                             <span style="opacity:0.55;">{{image_prompt}} {{name}} {{description}}</span>
                         </div>
+                        <div style="display:flex;align-items:center;gap:8px;margin-top:8px;padding-top:8px;border-top:1px solid var(--SmartThemeBorderColor,#444);">
+                            <button class="menu_button" id="lz-img-test">Test Generation</button>
+                            <span id="lz-img-test-status" style="opacity:0.65;font-size:0.9em;"></span>
+                        </div>
                     </div>
                 </div>
 

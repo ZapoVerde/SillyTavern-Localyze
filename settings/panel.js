@@ -46,7 +46,7 @@ import {
     DEFAULT_IMAGE_MODEL,
     DEFAULT_IMAGE_SOURCE,
 } from '../defaults.js';
-import { loadModelsForSource } from '../imageCache.js';
+import { loadModelsForSource, fetchPreviewBlob } from '../imageCache.js';
 
 import { buildPanelHTML } from '../ui/settings/templates.js';
 import { openPromptModal } from '../ui/settings/promptModal.js';
@@ -266,6 +266,27 @@ function bindHandlers() {
     $('#lz-settings').on('input', '#lz-image-model-text', function () {
         updateActiveSetting('imageModel', $(this).val().trim() || DEFAULT_IMAGE_MODEL);
         updateDirtyIndicator(meta);
+    });
+
+    $('#lz-settings').on('click', '#lz-img-test', async function () {
+        const $btn = $(this);
+        const $status = $('#lz-img-test-status');
+        const originalHtml = $btn.html();
+        $btn.prop('disabled', true).text('Generating...');
+        $status.text('');
+        try {
+            const objectUrl = await fetchPreviewBlob('a glowing lantern on a wooden tavern table, cinematic lighting');
+            $status.html('<span style="color:var(--SmartThemeQuoteColor,#28a745);">✓ Connected</span>');
+            await callPopup(
+                `<h3 style="margin-top:0;">${translate('Vistalyze — Connection OK')}</h3>
+                 <img src="${objectUrl}" style="width:100%;border-radius:6px;margin-top:8px;" />`,
+                'text',
+            );
+        } catch (err) {
+            $status.html(`<span style="color:var(--SmartThemeErrorColor,#dc3545);">✗ ${err.message.slice(0, 120)}</span>`);
+        } finally {
+            $btn.prop('disabled', false).html(originalHtml);
+        }
     });
 
     $('#lz-settings').on('change', '#lz-parallax-enabled', function () {
