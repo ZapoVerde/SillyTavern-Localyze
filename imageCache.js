@@ -185,7 +185,7 @@ export async function loadModelsForSource(source) {
 }
 
 export async function fetchPreviewBlob(prompt) {
-    const { image, format } = await callImageProxy(prompt, { width: 320, height: 256 })
+    const { image, format } = await callImageProxy(prompt, { width: 512, height: 512 })
     return URL.createObjectURL(base64ToBlob(image, format))
 }
 
