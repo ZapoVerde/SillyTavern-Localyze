@@ -203,11 +203,11 @@
 }
 
 /* --- Settings Step Bars --- */
-/* Left accent border visually nests VLZ step bars under the parent drawer,
-   distinguishing them from top-level extension headers. */
-.lz-call-row {
-    border-left: 3px solid var(--SmartThemeQuoteColor, #f5a623) !important;
-    border-radius: 0 6px 6px 0 !important;
+/* Left accent border only on the expanded content, not the header bar.
+   Hidden automatically when collapsed since content is display:none. */
+.lz-call-row > .inline-drawer-content {
+    border-left: 3px solid var(--SmartThemeQuoteColor, #f5a623);
+    padding-left: 10px;
 }
 
 /* --- Background Lightbox --- */
