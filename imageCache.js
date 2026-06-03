@@ -23,10 +23,9 @@
  *   assertions:
  *     purity: IO
  *     state_ownership: []
- *     external_io: [fetch(/api/sd/*/generate), fetch(/api/openai/generate-image),
- *                   fetch(/api/google/generate-image), fetch(/api/openrouter/image/generate),
- *                   fetch(/api/sd/*/models), fetch(/api/backgrounds/all),
- *                   fetch(/api/backgrounds/upload)]
+ *     external_io: [ST SD proxy endpoints, /api/openai/generate-image,
+ *                   /api/google/generate-image, /api/openrouter/image/generate,
+ *                   /api/backgrounds/all, /api/backgrounds/upload]
  */
 
 import { getRequestHeaders } from '../../../../script.js'
