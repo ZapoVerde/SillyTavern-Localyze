@@ -97,7 +97,7 @@ export function buildPanelHTML() {
             <div class="inline-drawer-content">
                 <div class="lz-settings-body">
                 <!-- Enable Toggle -->
-                <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--SmartThemeBorderColor,#444);">
+                <div>
                     <label class="checkbox_label" style="cursor:pointer;">
                         <input type="checkbox" id="lz-enabled" />
                         <span data-i18n="vistalyze.settings.enabled_label">Enable Vistalyze</span>
