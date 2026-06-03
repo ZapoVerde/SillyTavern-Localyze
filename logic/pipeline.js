@@ -137,13 +137,13 @@ async function handleKnownLocation(messageId, key) {
         const capturedId = messageId;
         generate(key, def, state.sessionId)
             .then(async newFile => {
-                // Protected Update: Record asset creation
                 addToFileIndex(newFile);
                 await lockedPatchSceneImage(capturedId, newFile);
-                
-                // Protected Update: Apply final visual state
-                updateState(key, newFile);
-                setBg(newFile);
+                // Only apply if a later pipeline hasn't already moved to a different location
+                if (state.currentLocation === key) {
+                    updateState(key, newFile);
+                    setBg(newFile);
+                }
             })
             .catch(err => {
                 error('Pipeline', 'Known location generate failed:', err);
@@ -230,15 +230,16 @@ async function handleUnknownLocation(messageId, context) {
         document.dispatchEvent(new CustomEvent('vistalyze:location-changed', { detail: { messageId } }));
 
         const capturedId = messageId;
-        generate(approved.key, approved, state.sessionId)
+        const capturedKey = approved.key;
+        generate(capturedKey, approved, state.sessionId)
             .then(async newFile => {
-                // Protected Update: Record asset creation
                 addToFileIndex(newFile);
                 await lockedPatchSceneImage(capturedId, newFile);
-                
-                // Protected Update: Apply final visual state
-                updateState(approved.key, newFile);
-                setBg(newFile);
+                // Only apply if a later pipeline hasn't already moved to a different location
+                if (state.currentLocation === capturedKey) {
+                    updateState(capturedKey, newFile);
+                    setBg(newFile);
+                }
             })
             .catch(err => {
                 error('Pipeline', 'Generate failed after approve:', err);
