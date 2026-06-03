@@ -325,7 +325,7 @@ function bindHandlers() {
                 body: JSON.stringify({}),
             });
             const data = await res.json();
-            const images = data.images ?? [];
+            const images = (data.images ?? []).map(f => (typeof f === 'string' ? f : f.filename)).filter(Boolean);
 
             const orphans = await runFullAudit(images);
 

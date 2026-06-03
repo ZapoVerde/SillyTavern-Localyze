@@ -84,24 +84,18 @@ export async function runFullAudit(allImages) {
                 const messages = await res.json()
                 if (!Array.isArray(messages)) continue
                 
-                for (const element of messages) {
-                    // 1. Extract Turn Session ID (Identity of the chat turn)
-                    const sessionId =
-                        element?.vistalyze?.sessionId ??
-                        element?.extra?.vistalyze?.sessionId ??
-                        element?.localyze?.sessionId ??
-                        element?.extra?.localyze?.sessionId ??
-                        null
-                    if (sessionId) knownSessions.add(sessionId)
+                // 1. Primary session ID — always in chat_metadata on the first line
+                const primaryId = messages[0]?.chat_metadata?.vistalyze?.sessionId
+                if (primaryId) knownSessions.add(primaryId)
 
-                    // 2. Extract Borrowed Session IDs (sourceSessionId in location_def)
-                    const vistalyzeData = element?.extra?.vistalyze ?? element?.vistalyze;
-                    if (vistalyzeData) {
-                        const records = Array.isArray(vistalyzeData) ? vistalyzeData : [vistalyzeData];
-                        for (const rec of records) {
-                            if (rec?.type === 'location_def' && rec.sourceSessionId) {
-                                knownSessions.add(rec.sourceSessionId);
-                            }
+                // 2. Borrowed session IDs — sourceSessionId on location_def records
+                for (const element of messages) {
+                    const vistalyzeData = element?.extra?.vistalyze ?? element?.vistalyze
+                    if (!vistalyzeData) continue
+                    const records = Array.isArray(vistalyzeData) ? vistalyzeData : [vistalyzeData]
+                    for (const rec of records) {
+                        if (rec?.type === 'location_def' && rec.sourceSessionId) {
+                            knownSessions.add(rec.sourceSessionId)
                         }
                     }
                 }

@@ -45,7 +45,7 @@ export async function openOrphanModal(orphans) {
         </tr>
     `).join('')
 
-    const confirmed = await callPopup(
+    const popupPromise = callPopup(
         `<h3 data-i18n="vistalyze.orphan.title">Orphaned Vistalyze Images (${orphans.length})</h3>
         <p style="opacity:0.65;font-size:0.88em;" data-i18n="vistalyze.orphan.hint">These files belong to sessions not found in any known chat.</p>
         <div style="max-height:300px; overflow-y:auto; border:1px solid var(--SmartThemeBorderColor); border-radius:4px;">
@@ -64,10 +64,15 @@ export async function openOrphanModal(orphans) {
         'confirm',
     )
 
-    // Bind event handlers after callPopup renders
-    $('#lz-orphan-select-all').on('change', function () {
-        $('.lz-orphan-check').prop('checked', this.checked)
-    })
+    // Bind select-all on the next tick — callPopup renders synchronously
+    // before returning the promise, so the elements are in the DOM here.
+    setTimeout(() => {
+        $('#lz-orphan-select-all').off('change').on('change', function () {
+            $('.lz-orphan-check').prop('checked', this.checked)
+        })
+    }, 0)
+
+    const confirmed = await popupPromise
 
     if (!confirmed) return
 
