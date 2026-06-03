@@ -31,7 +31,6 @@
 import { getRequestHeaders } from '../../../../script.js'
 import { getSettings } from './settings/data.js'
 import {
-    DEFAULT_IMAGE_MODEL,
     DEFAULT_IMAGE_SOURCE,
     DEFAULT_IMAGE_PROMPT_TEMPLATE,
 } from './defaults.js'
@@ -109,7 +108,7 @@ async function normalizeImageResponse(res, source) {
 async function callImageProxy(prompt, overrides = {}) {
     const s = getSettings()
     const source   = s.imageSource ?? DEFAULT_IMAGE_SOURCE
-    const model    = s.imageModel  ?? DEFAULT_IMAGE_MODEL
+    const model    = s.imageModel  ?? ''
     const width    = overrides.width  ?? 1920
     const height   = overrides.height ?? 1080
 

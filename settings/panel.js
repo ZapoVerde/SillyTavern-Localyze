@@ -43,7 +43,6 @@ import {
     DEFAULT_DESCRIBER_PROMPT, 
     DEFAULT_DISCOVERY_PROMPT,
     DEFAULT_IMAGE_PROMPT_TEMPLATE,
-    DEFAULT_IMAGE_MODEL,
     DEFAULT_IMAGE_SOURCE,
 } from '../defaults.js';
 import { loadModelsForSource, fetchPreviewBlob } from '../imageCache.js';
@@ -103,7 +102,11 @@ async function refreshModelControl(source, currentModel) {
             $select.append($('<option>', { value, text }));
         });
         if (currentModel) $select.val(currentModel);
-        if (!$select.val() && models.length) $select.val(models[0].value ?? models[0]);
+        if (!$select.val() && models.length) {
+            const first = models[0].value ?? models[0];
+            $select.val(first);
+            updateActiveSetting('imageModel', first);
+        }
         $text.hide();
         $select.show();
     } else {
@@ -132,7 +135,7 @@ function populateInputs() {
     }
     $lzSource.val(s.imageSource ?? DEFAULT_IMAGE_SOURCE);
 
-    refreshModelControl(s.imageSource ?? DEFAULT_IMAGE_SOURCE, s.imageModel ?? DEFAULT_IMAGE_MODEL);
+    refreshModelControl(s.imageSource ?? DEFAULT_IMAGE_SOURCE, s.imageModel);
 
     $('#lz-parallax-enabled').prop('checked', meta.parallaxEnabled ?? false);
 
@@ -255,16 +258,16 @@ function bindHandlers() {
         const val = $(this).val();
         updateActiveSetting('imageSource', val);
         updateDirtyIndicator(meta);
-        await refreshModelControl(val, getSettings().imageModel ?? DEFAULT_IMAGE_MODEL);
+        await refreshModelControl(val, getSettings().imageModel);
     });
 
     $('#lz-settings').on('change', '#lz-image-model', function () {
-        updateActiveSetting('imageModel', $(this).val() || DEFAULT_IMAGE_MODEL);
+        updateActiveSetting('imageModel', $(this).val() || null);
         updateDirtyIndicator(meta);
     });
 
     $('#lz-settings').on('input', '#lz-image-model-text', function () {
-        updateActiveSetting('imageModel', $(this).val().trim() || DEFAULT_IMAGE_MODEL);
+        updateActiveSetting('imageModel', $(this).val().trim() || null);
         updateDirtyIndicator(meta);
     });
 
