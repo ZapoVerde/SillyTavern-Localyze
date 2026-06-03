@@ -23,8 +23,7 @@
  *     external_io: [#extensions_settings DOM, settings/data.js, callPopup]
  */
 
-import { getRequestHeaders, callPopup, saveSettingsDebounced } from '../../../../../script.js';
-import { extension_settings } from '../../../../extensions.js';
+import { getRequestHeaders, callPopup } from '../../../../../script.js';
 import { t, translate } from '../../../../i18n.js';
 import { warn, error, setVerboseLogging } from '../utils/logger.js';
 import { runFullAudit } from '../orphanDetector.js';
@@ -45,7 +44,9 @@ import {
     DEFAULT_DISCOVERY_PROMPT,
     DEFAULT_IMAGE_PROMPT_TEMPLATE,
     DEFAULT_IMAGE_MODEL,
+    DEFAULT_IMAGE_SOURCE,
 } from '../defaults.js';
+import { loadModelsForSource } from '../imageCache.js';
 
 import { buildPanelHTML } from '../ui/settings/templates.js';
 import { openPromptModal } from '../ui/settings/promptModal.js';
@@ -89,29 +90,37 @@ function initDropdowns() {
 
 // ─── UI Population ──────────────────────────────────────────────────────────
 
-function mirrorSdModels() {
-    const $sdModel = $('#sd_model');
-    const $lzModel = $('#lz-image-model');
-    const current = $lzModel.val() || extension_settings.sd?.model || DEFAULT_IMAGE_MODEL;
-    $lzModel.empty();
-    if ($sdModel.length) {
-        $sdModel.find('option').each(function () {
-            $lzModel.append($('<option>', { value: $(this).val(), text: $(this).text() }));
+async function refreshModelControl(source, currentModel) {
+    const models  = await loadModelsForSource(source);
+    const $select = $('#lz-image-model');
+    const $text   = $('#lz-image-model-text');
+
+    if (models) {
+        $select.empty();
+        models.forEach(m => {
+            const value = m.value ?? m;
+            const text  = m.text  ?? m;
+            $select.append($('<option>', { value, text }));
         });
+        if (currentModel) $select.val(currentModel);
+        if (!$select.val() && models.length) $select.val(models[0].value ?? models[0]);
+        $text.hide();
+        $select.show();
+    } else {
+        $text.val(currentModel ?? '');
+        $select.hide();
+        $text.show();
     }
-    $lzModel.val(current);
 }
 
 function populateInputs() {
-    const s = getSettings();
+    const s    = getSettings();
     const meta = getMetaSettings();
 
     $('#lz-settings').find('.lz-history-input').each(function () {
         const key = $(this).data('history-key');
         $(this).val(s[key] ?? 0);
     });
-
-    $('#lz-image-model').val(s.imageModel ?? DEFAULT_IMAGE_MODEL);
 
     const $sdSource = $('#sd_source');
     const $lzSource = $('#lz-image-source');
@@ -121,9 +130,9 @@ function populateInputs() {
             $lzSource.append($('<option>', { value: $(this).val(), text: $(this).text() }));
         });
     }
-    $lzSource.val(extension_settings.sd?.source ?? 'pollinations');
+    $lzSource.val(s.imageSource ?? DEFAULT_IMAGE_SOURCE);
 
-    mirrorSdModels();
+    refreshModelControl(s.imageSource ?? DEFAULT_IMAGE_SOURCE, s.imageModel ?? DEFAULT_IMAGE_MODEL);
 
     $('#lz-parallax-enabled').prop('checked', meta.parallaxEnabled ?? false);
 
@@ -242,23 +251,20 @@ function bindHandlers() {
         updateDirtyIndicator(meta);
     });
 
-    $('#lz-settings').on('change', '#lz-image-source', function () {
+    $('#lz-settings').on('change', '#lz-image-source', async function () {
         const val = $(this).val();
-        if (!extension_settings.sd) return;
-        // Drive the SD extension's own source select so it reloads its model list
-        const $sdSource = $('#sd_source');
-        if ($sdSource.length) {
-            $sdSource.val(val).trigger('change');
-            // Mirror models after SD extension's async loadModels() completes
-            setTimeout(mirrorSdModels, 500);
-        } else {
-            extension_settings.sd.source = val;
-            saveSettingsDebounced();
-        }
+        updateActiveSetting('imageSource', val);
+        updateDirtyIndicator(meta);
+        await refreshModelControl(val, getSettings().imageModel ?? DEFAULT_IMAGE_MODEL);
     });
 
     $('#lz-settings').on('change', '#lz-image-model', function () {
         updateActiveSetting('imageModel', $(this).val() || DEFAULT_IMAGE_MODEL);
+        updateDirtyIndicator(meta);
+    });
+
+    $('#lz-settings').on('input', '#lz-image-model-text', function () {
+        updateActiveSetting('imageModel', $(this).val().trim() || DEFAULT_IMAGE_MODEL);
         updateDirtyIndicator(meta);
     });
 

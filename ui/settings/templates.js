@@ -154,7 +154,11 @@ export function buildPanelHTML(meta) {
                         </div>
                         <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
                             <label style="opacity:0.75;white-space:nowrap;min-width:80px;" data-i18n="vistalyze.settings.label_model">Model:</label>
-                            <select id="lz-image-model" class="text_pole" style="flex:1;"></select>
+                            <div style="flex:1;display:flex;">
+                                <select id="lz-image-model" class="text_pole" style="flex:1;display:none;"></select>
+                                <input id="lz-image-model-text" type="text" class="text_pole"
+                                       placeholder="Enter model name..." style="flex:1;display:none;" />
+                            </div>
                         </div>
                         <div style="display:flex;align-items:center;gap:8px;">
                             <label style="opacity:0.75;white-space:nowrap;min-width:80px;" data-i18n="vistalyze.settings.label_prompt_template">Prompt:</label>

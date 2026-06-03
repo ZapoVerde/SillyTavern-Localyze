@@ -24,7 +24,10 @@
  * DEFAULT_DISCOVERY_PROMPT
  */
 
-/** Default Pollinations model. */
+/** Default image source — routes through the ST SD extension proxy. */
+export const DEFAULT_IMAGE_SOURCE = 'pollinations'
+
+/** Default model for the default source. */
 export const DEFAULT_IMAGE_MODEL = 'flux'
 
 /** Image prompt template. Interpolated by imageCache.js. */
