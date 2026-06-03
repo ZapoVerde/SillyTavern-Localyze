@@ -37,20 +37,15 @@ export function setVerboseLogging(value) {
 }
 
 /**
- * Emits a single labelled log line, collapsing any extra arguments into a group.
- * @param {Function} consoleFn The bound console method (log/warn/error) for detail lines.
+ * Emits a single labelled log line with all arguments on one call.
+ * Avoids console.groupCollapsed so log aggregators (e.g. Loggeryze) see
+ * one entry per VLZ log call rather than multiple fragmented lines.
+ * @param {Function} consoleFn The bound console method (log/warn/error).
  * @param {string} tag Module identifier, e.g. 'Boot'
  * @param {any[]} args Caller arguments: [message, ...details]
  */
 function _output(consoleFn, tag, args) {
-    const label = `[Vistalyze:${tag}] ${String(args[0] ?? '')}`;
-    if (args.length <= 1) {
-        consoleFn(label);
-        return;
-    }
-    console.groupCollapsed(label);
-    args.slice(1).forEach(a => consoleFn(a));
-    console.groupEnd();
+    consoleFn(`[Vistalyze:${tag}]`, ...args);
 }
 
 /**
