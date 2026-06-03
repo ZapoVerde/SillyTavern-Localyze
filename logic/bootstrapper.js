@@ -97,19 +97,23 @@ export async function runBoot() {
     const isCurrentCustom = !!currentDef?.customBg;
     const isCurrentImageMissing = !isCurrentCustom && state.currentImage && !state.fileIndex.has(state.currentImage);
 
+    const meta = getMetaSettings();
+
     // 4. UI Restoration
-    if (state.currentImage && !isCurrentImageMissing) {
-        log('Boot', 'Restoring valid background:', state.currentImage);
-        setBg(state.currentImage);
-    } else {
-        if (isCurrentImageMissing) {
-            warn('Boot', `Active background ${state.currentImage} is missing. Clearing UI to prevent 404.`);
+    if (meta.enabled ?? true) {
+        if (state.currentImage && !isCurrentImageMissing) {
+            log('Boot', 'Restoring valid background:', state.currentImage);
+            setBg(state.currentImage);
+        } else {
+            if (isCurrentImageMissing) {
+                warn('Boot', `Active background ${state.currentImage} is missing. Clearing UI to prevent 404.`);
+            }
+            clearBg();
         }
-        clearBg();
     }
 
     // 5. Execute Regeneration Queue
-    if (queue.length > 0) {
+    if ((meta.enabled ?? true) && queue.length > 0) {
         log('Boot', `Regenerating ${queue.length} missing assets...`);
         for (const key of queue) {
             const def = state.locations[key];
@@ -128,7 +132,6 @@ export async function runBoot() {
     }
 
     // 6. Fast Orphan Detection (Badge Update)
-    const meta = getMetaSettings();
     const suspects = fastDiff(allImages, meta?.knownSessions ?? []);
     if (suspects.length > 0) {
         const newAuditCache = {

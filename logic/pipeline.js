@@ -25,7 +25,7 @@ import { t, translate } from '../../../../i18n.js';
 import { getContext } from '../../../../extensions.js';
 import { error } from '../utils/logger.js';
 import { state, updateState, upsertLocation, addToFileIndex } from '../state.js';
-import { getSettings } from '../settings/data.js';
+import { getSettings, getMetaSettings } from '../settings/data.js';
 import { buildHistoryText, buildDescriberContext, buildSpatialContext, escapeHtml, slugify } from '../utils/history.js';
 import { detectBoolean, detectClassifier, detectDescriber } from '../detector.js';
 import { generate } from '../imageCache.js';
@@ -47,6 +47,8 @@ export async function runPipeline(messageId) {
     const message = context.chat[messageId];
     
     if (!message || message.is_user) return;
+
+    if (!(getMetaSettings().enabled ?? true)) return;
 
     const s = getSettings();
     if (!(s.autoDetectEnabled ?? true)) return;

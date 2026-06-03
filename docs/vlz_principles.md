@@ -75,6 +75,20 @@ Every chat is assigned a unique, permanent session ID on creation. Every generat
 
 ---
 
+## Unconditional Reversibility
+
+VLZ's primary mechanical responsibility outside the detection pipeline is maintaining a clean, reversible environment. The user must always be able to disable Vistalyze and find their ST exactly as they left it.
+
+This means:
+- Deactivation clears any VLZ-managed background immediately.
+- The pipeline does not run while the extension is disabled — no LLM calls, no image generation, no background transitions.
+- Injected per-message badges are removed from the DOM on deactivation.
+- On re-enable, the boot sequence re-runs to restore managed state from the DNA chain.
+
+The disable toggle is not a pause — it is a clean exit. Re-enabling is a clean re-entry. Entry and exit state transitions must be perfectly symmetrical.
+
+---
+
 ## Error Handling Philosophy
 
 The goal is **Graceful Degradation.**

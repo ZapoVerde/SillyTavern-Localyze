@@ -82,7 +82,7 @@ export function buildCallRow(id, label, promptKey, profileKey, historyKey = null
  * @param {string[]} availableModels List of Pollinations models to display.
  * @returns {string} Full HTML layout string.
  */
-export function buildPanelHTML(meta) {
+export function buildPanelHTML() {
 
     const step1Guidance = "This gate runs on every AI message. To keep the chat fast and cheap, use a lightweight model. Mistral Small 2603 is the recommended choice for this high-frequency task.";
     const creativeGuidance = "This step requires higher descriptive intelligence. Weaker models can produce chaotic results or fail to follow the extraction format. Gemini 3.1 Flash Lite Preview is recommended for its balance of power and reliability.";
@@ -96,6 +96,14 @@ export function buildPanelHTML(meta) {
             </div>
             <div class="inline-drawer-content">
                 <div class="lz-settings-body">
+                <!-- Enable Toggle -->
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--SmartThemeBorderColor,#444);">
+                    <label class="checkbox_label" style="cursor:pointer;">
+                        <input type="checkbox" id="lz-enabled" />
+                        <span data-i18n="vistalyze.settings.enabled_label">Enable Vistalyze</span>
+                    </label>
+                </div>
+
                 <!-- Profile Management Bar -->
                 <div class="lz-profile-bar" style="display:flex;align-items:center;gap:4px;margin-bottom:12px;">
                     <select id="lz-profile-select" class="text_pole" style="flex:1;" data-i18n="[title]vistalyze.settings.profile_select_title" title="Active settings profile"></select>
@@ -183,7 +191,7 @@ export function buildPanelHTML(meta) {
                     <div class="inline-drawer-content" style="padding:10px 12px 12px;">
                         <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
                             <button class="menu_button" id="lz-audit-btn" style="white-space:nowrap;">
-                                <i class="fa-solid fa-trash-can"></i> <span data-i18n="vistalyze.settings.btn_audit_images">Audit Images</span>
+                                <i class="fa-solid fa-trash-can" style="margin-right:4px;"></i><span data-i18n="vistalyze.settings.btn_audit_images">Audit Images</span>
                             </button>
                             <span id="lz-orphan-badge" style="display:none;background:var(--SmartThemeErrorColor);color:white;padding:1px 6px;border-radius:10px;"></span>
                         </div>

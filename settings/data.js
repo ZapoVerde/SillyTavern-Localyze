@@ -27,6 +27,7 @@ import { saveSettingsDebounced } from '../../../../../script.js';
 import { extension_settings } from '../../../../extensions.js';
 import { log, warn } from '../utils/logger.js';
 import {
+    DEFAULT_ENABLED,
     DEFAULT_BOOLEAN_PROMPT,
     DEFAULT_BOOLEAN_HISTORY,
     DEFAULT_CLASSIFIER_PROMPT,
@@ -211,6 +212,7 @@ export function initSettings() {
         root.activeState = Object.assign({}, PROFILE_DEFAULTS, root.activeState);
     }
 
+    if (typeof root.enabled !== 'boolean') root.enabled = DEFAULT_ENABLED;
     if (typeof root.parallaxEnabled !== 'boolean') root.parallaxEnabled = DEFAULT_PARALLAX_ENABLED;
     if (typeof root.verboseLogging !== 'boolean') root.verboseLogging = DEFAULT_VERBOSE_LOGGING;
     if (typeof root.rerunBadge !== 'boolean') root.rerunBadge = DEFAULT_RERUN_BADGE;

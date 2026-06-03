@@ -137,6 +137,7 @@ function populateInputs() {
 
     refreshModelControl(s.imageSource ?? DEFAULT_IMAGE_SOURCE, s.imageModel);
 
+    $('#lz-enabled').prop('checked', meta.enabled ?? true);
     $('#lz-parallax-enabled').prop('checked', meta.parallaxEnabled ?? false);
 
     // Auto-Detect toggle
@@ -203,6 +204,20 @@ function bindHandlers() {
             { name: 'description',  description: 'The location\'s conceptual definition' },
         ],
     };
+
+    $('#lz-settings').on('change', '#lz-enabled', async function () {
+        const val = $(this).prop('checked');
+        updateMetaSetting('enabled', val);
+        if (val) {
+            const { runBoot } = await import('../logic/bootstrapper.js');
+            const { reinjectAllBadges } = await import('../ui/messageBadge.js');
+            await runBoot();
+            reinjectAllBadges();
+        } else {
+            const { removeAllBadges } = await import('../ui/messageBadge.js');
+            removeAllBadges();
+        }
+    });
 
     $('#lz-settings').on('change', '#lz-profile-select', function() {
         const newName = $(this).val();
@@ -360,7 +375,7 @@ export function injectSettingsPanel() {
     if (!$parent.length) return;
 
     const meta = getMetaSettings();
-    $parent.append(buildPanelHTML(meta));
+    $parent.append(buildPanelHTML());
 
     setVerboseLogging(meta.verboseLogging ?? true);
     bindHandlers();

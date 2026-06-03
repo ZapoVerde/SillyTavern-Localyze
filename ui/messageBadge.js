@@ -154,6 +154,13 @@ export function injectMessageBadge(messageId) {
 }
 
 /**
+ * Removes all injected badges from the DOM. Called on extension disable.
+ */
+export function removeAllBadges() {
+    $('.lz-msg-badge').remove();
+}
+
+/**
  * Re-renders badges for every AI message currently in the chat.
  * Called after boot and after a chat-changed event so all messages get a badge.
  */
