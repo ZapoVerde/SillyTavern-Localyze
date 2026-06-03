@@ -202,6 +202,14 @@
     font-size: 1.2em;
 }
 
+/* --- Settings Step Bars --- */
+/* Left accent border visually nests VLZ step bars under the parent drawer,
+   distinguishing them from top-level extension headers. */
+.lz-call-row {
+    border-left: 3px solid var(--SmartThemeQuoteColor, #f5a623) !important;
+    border-radius: 0 6px 6px 0 !important;
+}
+
 /* --- Background Lightbox --- */
 .lz-bg-lightbox {
     position: fixed;
