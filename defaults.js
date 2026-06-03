@@ -55,10 +55,10 @@ export const DEFAULT_AUTO_ACCEPT_DESCRIPTION = false
 export const DEFAULT_RERUN_BADGE = false
 
 /** Default turn-pair history for LLM calls. */
-export const DEFAULT_BOOLEAN_HISTORY = 2
-export const DEFAULT_CLASSIFIER_HISTORY = 2
-export const DEFAULT_DESCRIBER_HISTORY = 2
-export const DEFAULT_DISCOVERY_HISTORY = 2
+export const DEFAULT_BOOLEAN_HISTORY = 1
+export const DEFAULT_CLASSIFIER_HISTORY = 1
+export const DEFAULT_DESCRIBER_HISTORY = 1
+export const DEFAULT_DISCOVERY_HISTORY = 1
 
 export const DEFAULT_BOOLEAN_PROMPT =
 `[SYSTEM: LOCATION CHANGE DETECTOR]
