@@ -202,14 +202,13 @@
     font-size: 1.2em;
 }
 
-/* --- Settings Step Bars --- */
-/* Indent bars so they sit visually inside the VLZ section rather than
-   flush with top-level extension headers. */
-.lz-call-row {
-    margin-left: 8px;
+/* --- Settings Body --- */
+/* Single indent rule for all VLZ settings content. */
+.lz-settings-body {
+    padding-left: 8px;
 }
 
-/* Left accent border only on the expanded content, not the header bar.
+/* Left accent border only on expanded step/section content, not the header bar.
    Hidden automatically when collapsed since content is display:none. */
 .lz-call-row > .inline-drawer-content {
     border-left: 3px solid var(--SmartThemeQuoteColor, #f5a623);

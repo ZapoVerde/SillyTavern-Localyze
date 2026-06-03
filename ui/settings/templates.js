@@ -95,15 +95,7 @@ export function buildPanelHTML(meta) {
                 <div class="inline-drawer-icon fa-solid fa-circle-chevron-down down"></div>
             </div>
             <div class="inline-drawer-content">
-                <!-- Feature Toggles -->
-                <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--SmartThemeBorderColor,#444);">
-                    <label class="checkbox_label" style="cursor:pointer;">
-                        <input type="checkbox" id="lz-parallax-enabled" />
-                        <span data-i18n="vistalyze.settings.parallax_label">Parallax backgrounds</span>
-                    </label>
-                    <span style="opacity:0.55;" data-i18n="vistalyze.settings.parallax_hint">Pans wide images horizontally with mouse or tilt on narrow screens</span>
-                </div>
-
+                <div class="lz-settings-body">
                 <!-- Profile Management Bar -->
                 <div class="lz-profile-bar" style="display:flex;align-items:center;gap:4px;margin-bottom:12px;">
                     <select id="lz-profile-select" class="text_pole" style="flex:1;" data-i18n="[title]vistalyze.settings.profile_select_title" title="Active settings profile"></select>
@@ -113,10 +105,19 @@ export function buildPanelHTML(meta) {
                     <button id="lz-profile-delete" class="menu_button" data-i18n="[title]vistalyze.settings.btn_delete_profile" title="Delete profile">&#x1F5D1;&#xFE0F;</button>
                 </div>
 
-                <p style="opacity:0.7;margin:0 0 14px;" data-i18n="vistalyze.settings.profile_hint">
+                <p style="opacity:0.7;margin:0 0 10px;" data-i18n="vistalyze.settings.profile_hint">
                     Each AI call uses its own prompt template and connection profile.
                     Leave connection blank to use the chat's active API.
                 </p>
+
+                <!-- Parallax -->
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--SmartThemeBorderColor,#444);">
+                    <label class="checkbox_label" style="cursor:pointer;">
+                        <input type="checkbox" id="lz-parallax-enabled" />
+                        <span data-i18n="vistalyze.settings.parallax_label">Parallax backgrounds</span>
+                    </label>
+                    <span style="opacity:0.55;" data-i18n="vistalyze.settings.parallax_hint">Pans wide images horizontally with mouse or tilt on narrow screens</span>
+                </div>
 
                 <!-- Detection & Discovery Steps -->
                 ${buildCallRow('boolean',    'Step 1 — Location Changed? (Boolean)',   'booleanPrompt',    'booleanProfileId',    'booleanHistory', step1Guidance, 'vistalyze.settings.step1', `
@@ -202,6 +203,7 @@ export function buildPanelHTML(meta) {
                         </div>
                     </div>
                 </div>
+                </div><!-- end lz-settings-body -->
             </div>
         </div>
     </div>`;
