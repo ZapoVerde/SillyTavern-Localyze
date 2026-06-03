@@ -23,7 +23,8 @@
  *     external_io: [#extensions_settings DOM, settings/data.js, callPopup]
  */
 
-import { getRequestHeaders, callPopup } from '../../../../../script.js';
+import { getRequestHeaders, callPopup, saveSettingsDebounced } from '../../../../../script.js';
+import { extension_settings } from '../../../../extensions.js';
 import { t, translate } from '../../../../i18n.js';
 import { warn, error, setVerboseLogging } from '../utils/logger.js';
 import { runFullAudit } from '../orphanDetector.js';
@@ -99,6 +100,17 @@ function populateInputs() {
     });
 
     $('#lz-image-model').val(s.imageModel ?? DEFAULT_IMAGE_MODEL);
+
+    const $sdSource = $('#sd_source');
+    const $lzSource = $('#lz-image-source');
+    $lzSource.empty();
+    if ($sdSource.length) {
+        $sdSource.find('option').each(function () {
+            $lzSource.append($('<option>', { value: $(this).val(), text: $(this).text() }));
+        });
+    }
+    $lzSource.val(extension_settings.sd?.source ?? 'pollinations');
+
     $('#lz-parallax-enabled').prop('checked', meta.parallaxEnabled ?? false);
 
     // Auto-Detect toggle
@@ -216,11 +228,15 @@ function bindHandlers() {
         updateDirtyIndicator(meta);
     });
 
+    $('#lz-settings').on('change', '#lz-image-source', function () {
+        if (extension_settings.sd) {
+            extension_settings.sd.source = $(this).val();
+            saveSettingsDebounced();
+        }
+    });
+
     $('#lz-settings').on('change', '#lz-image-model', function () {
-        const val = $(this).val() || DEFAULT_IMAGE_MODEL;
-        
-        // Protected Update: Update active model
-        updateActiveSetting('imageModel', val);
+        updateActiveSetting('imageModel', $(this).val() || DEFAULT_IMAGE_MODEL);
         updateDirtyIndicator(meta);
     });
 
