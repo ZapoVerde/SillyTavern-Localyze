@@ -10,7 +10,6 @@
  * - Added DEFAULT_AUTO_ACCEPT_DESCRIPTION for Gate 2 pipeline bypass.
  *
  * @api-declaration
- * POLLINATIONS_MODELS
  * DEFAULT_IMAGE_MODEL
  * DEFAULT_IMAGE_PROMPT_TEMPLATE
  * DEFAULT_AUTO_ACCEPT_LOCATION
@@ -24,17 +23,6 @@
  * DEFAULT_DESCRIBER_PROMPT
  * DEFAULT_DISCOVERY_PROMPT
  */
-
-/** Available Pollinations image models. */
-export const POLLINATIONS_MODELS =[
-    'flux',
-    'zimage',
-    'klein',
-    'gptimage',
-    'grok-imagine',
-    'seedream',
-    'qwen-image',
-]
 
 /** Default Pollinations model. */
 export const DEFAULT_IMAGE_MODEL = 'flux'

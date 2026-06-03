@@ -82,10 +82,7 @@ export function buildCallRow(id, label, promptKey, profileKey, historyKey = null
  * @param {string[]} availableModels List of Pollinations models to display.
  * @returns {string} Full HTML layout string.
  */
-export function buildPanelHTML(meta, availableModels) {
-    const modelOptions = Array.isArray(availableModels)
-        ? availableModels.map(m => `<option value="${escapeHtml(m)}">${escapeHtml(m)}</option>`).join('')
-        : '';
+export function buildPanelHTML(meta) {
 
     const step1Guidance = "This gate runs on every AI message. To keep the chat fast and cheap, use a lightweight model. Mistral Small 2603 is the recommended choice for this high-frequency task.";
     const creativeGuidance = "This step requires higher descriptive intelligence. Weaker models can produce chaotic results or fail to follow the extraction format. Gemini 3.1 Flash Lite Preview is recommended for its balance of power and reliability.";
@@ -157,9 +154,7 @@ export function buildPanelHTML(meta, availableModels) {
                         </div>
                         <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
                             <label style="opacity:0.75;white-space:nowrap;min-width:80px;" data-i18n="vistalyze.settings.label_model">Model:</label>
-                            <select id="lz-image-model" class="text_pole" style="flex:1;">
-                                ${modelOptions}
-                            </select>
+                            <select id="lz-image-model" class="text_pole" style="flex:1;"></select>
                         </div>
                         <div style="display:flex;align-items:center;gap:8px;">
                             <label style="opacity:0.75;white-space:nowrap;min-width:80px;" data-i18n="vistalyze.settings.label_prompt_template">Prompt:</label>

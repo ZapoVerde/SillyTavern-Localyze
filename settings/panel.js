@@ -43,9 +43,8 @@ import {
     DEFAULT_CLASSIFIER_PROMPT, 
     DEFAULT_DESCRIBER_PROMPT, 
     DEFAULT_DISCOVERY_PROMPT,
-    DEFAULT_IMAGE_PROMPT_TEMPLATE, 
-    DEFAULT_IMAGE_MODEL, 
-    POLLINATIONS_MODELS 
+    DEFAULT_IMAGE_PROMPT_TEMPLATE,
+    DEFAULT_IMAGE_MODEL,
 } from '../defaults.js';
 
 import { buildPanelHTML } from '../ui/settings/templates.js';
@@ -90,6 +89,19 @@ function initDropdowns() {
 
 // ─── UI Population ──────────────────────────────────────────────────────────
 
+function mirrorSdModels() {
+    const $sdModel = $('#sd_model');
+    const $lzModel = $('#lz-image-model');
+    const current = $lzModel.val() || extension_settings.sd?.model || DEFAULT_IMAGE_MODEL;
+    $lzModel.empty();
+    if ($sdModel.length) {
+        $sdModel.find('option').each(function () {
+            $lzModel.append($('<option>', { value: $(this).val(), text: $(this).text() }));
+        });
+    }
+    $lzModel.val(current);
+}
+
 function populateInputs() {
     const s = getSettings();
     const meta = getMetaSettings();
@@ -110,6 +122,8 @@ function populateInputs() {
         });
     }
     $lzSource.val(extension_settings.sd?.source ?? 'pollinations');
+
+    mirrorSdModels();
 
     $('#lz-parallax-enabled').prop('checked', meta.parallaxEnabled ?? false);
 
@@ -229,8 +243,16 @@ function bindHandlers() {
     });
 
     $('#lz-settings').on('change', '#lz-image-source', function () {
-        if (extension_settings.sd) {
-            extension_settings.sd.source = $(this).val();
+        const val = $(this).val();
+        if (!extension_settings.sd) return;
+        // Drive the SD extension's own source select so it reloads its model list
+        const $sdSource = $('#sd_source');
+        if ($sdSource.length) {
+            $sdSource.val(val).trigger('change');
+            // Mirror models after SD extension's async loadModels() completes
+            setTimeout(mirrorSdModels, 500);
+        } else {
+            extension_settings.sd.source = val;
             saveSettingsDebounced();
         }
     });
@@ -308,7 +330,7 @@ export function injectSettingsPanel() {
     if (!$parent.length) return;
 
     const meta = getMetaSettings();
-    $parent.append(buildPanelHTML(meta, POLLINATIONS_MODELS));
+    $parent.append(buildPanelHTML(meta));
 
     setVerboseLogging(meta.verboseLogging ?? true);
     bindHandlers();
