@@ -203,6 +203,12 @@
 }
 
 /* --- Settings Step Bars --- */
+/* Indent bars so they sit visually inside the VLZ section rather than
+   flush with top-level extension headers. */
+.lz-call-row {
+    margin-left: 8px;
+}
+
 /* Left accent border only on the expanded content, not the header bar.
    Hidden automatically when collapsed since content is display:none. */
 .lz-call-row > .inline-drawer-content {
