@@ -182,7 +182,7 @@ export function buildPanelHTML(meta) {
                     </div>
                     <div class="inline-drawer-content" style="padding:10px 12px 12px;">
                         <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-                            <button class="menu_button" id="lz-audit-btn">
+                            <button class="menu_button" id="lz-audit-btn" style="white-space:nowrap;">
                                 <i class="fa-solid fa-trash-can"></i> <span data-i18n="vistalyze.settings.btn_audit_images">Audit Images</span>
                             </button>
                             <span id="lz-orphan-badge" style="display:none;background:var(--SmartThemeErrorColor);color:white;padding:1px 6px;border-radius:10px;"></span>
