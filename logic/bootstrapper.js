@@ -100,16 +100,14 @@ export async function runBoot() {
     const meta = getMetaSettings();
 
     // 4. UI Restoration
-    if (meta.enabled ?? true) {
-        if (state.currentImage && !isCurrentImageMissing) {
-            log('Boot', 'Restoring valid background:', state.currentImage);
-            setBg(state.currentImage);
-        } else {
-            if (isCurrentImageMissing) {
-                warn('Boot', `Active background ${state.currentImage} is missing. Clearing UI to prevent 404.`);
-            }
-            clearBg();
+    if ((meta.enabled ?? true) && state.currentImage && !isCurrentImageMissing) {
+        log('Boot', 'Restoring valid background:', state.currentImage);
+        setBg(state.currentImage);
+    } else {
+        if (isCurrentImageMissing) {
+            warn('Boot', `Active background ${state.currentImage} is missing. Clearing UI to prevent 404.`);
         }
+        clearBg();
     }
 
     // 5. Execute Regeneration Queue

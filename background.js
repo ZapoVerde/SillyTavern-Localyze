@@ -108,6 +108,20 @@ export function set(filename) {
 }
 
 /**
+ * Releases the VLZ metadata lock and tears down parallax without touching #bg1.
+ * Use when the host application (ST) will handle visual restoration itself —
+ * e.g. on close-chat, where ST's own onChatChanged() already restores the
+ * user's global default background to #bg1.
+ */
+export function releaseLock() {
+    if (chat_metadata[BG_KEY] && !isManagedByVistalyze()) return;
+    delete chat_metadata[BG_KEY]
+    delete chat_metadata[MANAGED_KEY]
+    detachParallax()
+    saveMetadataDebounced()
+}
+
+/**
  * Removes the background image and releases the metadata lock.
  */
 export function clear() {

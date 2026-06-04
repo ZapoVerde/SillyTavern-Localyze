@@ -29,7 +29,7 @@ import { getSettings, getMetaSettings } from '../settings/data.js';
 import { buildHistoryText, buildDescriberContext, buildSpatialContext, escapeHtml, slugify } from '../utils/history.js';
 import { detectBoolean, detectClassifier, detectDescriber } from '../detector.js';
 import { generate } from '../imageCache.js';
-import { set as setBg, clear as clearBg } from '../background.js';
+import { set as setBg } from '../background.js';
 import { openAddModal } from '../ui/addModal.js';
 import { 
     lockedWriteSceneRecord, 
@@ -130,8 +130,7 @@ async function handleKnownLocation(messageId, key) {
         updateState(key, filename);
         document.dispatchEvent(new CustomEvent('vistalyze:location-changed', { detail: { messageId } }));
     } else {
-        // Transition recorded but image is missing: clear and generate
-        clearBg();
+        // Transition recorded but image is missing: keep current bg visible until generation arrives
         await lockedWriteSceneRecord(messageId, { location: key, image: null, bg_declined: false });
         updateState(key, null);
         document.dispatchEvent(new CustomEvent('vistalyze:location-changed', { detail: { messageId } }));
@@ -224,7 +223,7 @@ async function handleUnknownLocation(messageId, context) {
         document.dispatchEvent(new CustomEvent('vistalyze:location-changed', { detail: { messageId } }));
     } else {
         // Path B: AI Generation (Standard Two-Write Pattern)
-        clearBg();
+        // Keep current bg visible until generation arrives — setBg() in the .then() handles the fade-in
         await lockedWriteSceneRecord(messageId, { location: approved.key, image: null, bg_declined: false });
         
         // Protected Update: Set scene intent

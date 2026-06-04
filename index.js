@@ -29,6 +29,7 @@ import { log, error } from './utils/logger.js';
 import { initSettings } from './settings/data.js';
 import { runBoot } from './logic/bootstrapper.js';
 import { runPipeline } from './logic/pipeline.js';
+import { releaseLock } from './background.js';
 import { handleOpenLibrary, handleEditLocation, handleManualDescriber } from './logic/maintenance.js';
 import { injectToolbar } from './ui/toolbar.js';
 import { injectSettingsPanel } from './settings/panel.js';
@@ -84,6 +85,14 @@ function handleChatChanged() {
         vistalyze_managed:  chat_metadata.vistalyze_managed  ?? '(not set)',
     });
     resetState();
+
+    const context = getContext();
+    if (!context?.chatId) {
+        log('Core', 'No active chat — releasing VLZ lock, ST will restore default bg.');
+        releaseLock();
+        return;
+    }
+
     runBoot()
         .then(() => reinjectAllBadges())
         .catch(err => {
