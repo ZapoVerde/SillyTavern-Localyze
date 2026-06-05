@@ -51,7 +51,7 @@ export function bindImportEvents(handlers) {
         const avatar = $(this).data('avatar');
         const name = $(this).data('name');
         
-        $('#lz-import-body').html(`<div style="text-align:center; padding:50px; opacity:0.6;"><i class="fa-solid fa-spinner fa-spin"></i> Scanning Archives...</div>`);
+        $('#lz-import-body').html(`<div style="text-align:center; padding:50px; opacity:0.6;"><i class="fa-solid fa-spinner fa-spin"></i> ${translate('vistalyze.import.scanning')}</div>`);
         
         try {
             const chatFilesRaw = await fetchCharacterChats(avatar);
@@ -76,7 +76,7 @@ export function bindImportEvents(handlers) {
             renderChats(name, avatar, chatSummaries);
         } catch (err) {
             console.error('[Vistalyze] Scan failed details:', err);
-            $('#lz-import-body').html(`<p style="text-align:center; padding:20px; color:var(--SmartThemeErrorColor);">Scan failed. See console.</p>`);
+            $('#lz-import-body').html(`<p style="text-align:center; padding:20px; color:var(--SmartThemeErrorColor);">${translate('vistalyze.import.scan_failed')}</p>`);
         }
     });
 
@@ -124,10 +124,10 @@ export function bindImportEvents(handlers) {
         let tip = names.join(', ');
         if (locations.length > 5) {
             const remaining = locations.length - 5;
-            tip += ` ${translate('and')} ${remaining} ${translate('more...')}`;
+            tip += ` ${translate('vistalyze.import.and')} ${remaining} ${translate('vistalyze.import.more')}`;
         }
         
-        $(this).attr('title', `${translate('Imports:')} ${tip}`);
+        $(this).attr('title', `${translate('vistalyze.import.imports_list')} ${tip}`);
     });
 
     // ─── Collision & Import Execution ────────────────────────────────────

@@ -80,7 +80,7 @@ export async function pickNativeBackground() {
             gap: 10px;
         ">
             <i class="fa-solid fa-arrow-left"></i>
-            <span>${translate('Return to Vistalyze (Cancel Selection)')}</span>
+            <span>${translate('vistalyze.bgHijacker.cancel_label')}</span>
         </div>
     `);
     $('body').append($cancelBtn);

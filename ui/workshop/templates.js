@@ -118,16 +118,20 @@ export function getLibraryListHTML(drafts, currentKey, fileIndex = new Set(), se
             <div class="lz-lib-thumb" data-filename="${escapeHtml(filename || '')}" title="View background">
                 ${thumbHTML}
             </div>
-            <div class="lz-lib-text" style="cursor:pointer;" title="Apply location">
+            <div class="lz-lib-text" style="cursor:pointer;"
+                 data-i18n="[title]vistalyze.workshop.apply_title" title="Apply Location">
                 <strong style="color: ${isCurrent ? 'var(--SmartThemeQuoteColor)' : 'inherit'};">
                     ${isCurrent ? '<i class="fa-solid fa-location-dot"></i> ' : ''}${escapeHtml(loc.name)}
                 </strong>
                 <small>${escapeHtml(loc.description)}</small>
             </div>
             <div class="lz-lib-actions">
-                <i class="fa-solid fa-folder-open lz-lib-pick-bg" style="font-size:1.2em;" title="Select existing background"></i>
-                <i class="fa-solid fa-pen-to-square lz-lib-edit" style="font-size:1.2em;" title="Edit in Architect"></i>
-                <i class="fa-solid fa-trash lz-lib-delete" style="font-size:1.2em;" title="Delete Location"></i>
+                <i class="fa-solid fa-folder-open lz-lib-pick-bg" style="font-size:1.2em;"
+                   data-i18n="[title]vistalyze.workshop.select_bg_title" title="Select existing background"></i>
+                <i class="fa-solid fa-pen-to-square lz-lib-edit" style="font-size:1.2em;"
+                   data-i18n="[title]vistalyze.workshop.edit_title" title="Edit in Architect"></i>
+                <i class="fa-solid fa-trash lz-lib-delete" style="font-size:1.2em;"
+                   data-i18n="[title]vistalyze.workshop.delete_title" title="Delete Location"></i>
             </div>
         </div>`;
     }).join('');
@@ -156,7 +160,7 @@ export function getArchitectGridHTML(draft, currentImgUrl, proposedImgUrl, propo
         <label data-i18n="vistalyze.workshop.label_name">Location Name</label>
         <input type="text" id="lz-arch-name" class="text_pole" style="width:100%;" value="${escapeHtml(draft.name)}" />
 
-        <label><span data-i18n="vistalyze.workshop.label_definition">Definition (Logic)</span> <i class="fa-solid fa-wand-sparkles lz-regen-spark" data-field="description" title="Regenerate logic from context"></i></label>
+        <label><span data-i18n="vistalyze.workshop.label_definition">Definition (Logic)</span> <i class="fa-solid fa-wand-sparkles lz-regen-spark" data-field="description" data-i18n="[title]vistalyze.workshop.regen_logic_title" title="Regenerate logic from context"></i></label>
         <textarea id="lz-arch-definition" class="text_pole" rows="${defRows}" style="width:100%; resize:vertical;">${escapeHtml(draft.description)}</textarea>
 
         <label data-i18n="vistalyze.workshop.label_visuals">Visuals (Image Prompt)</label>

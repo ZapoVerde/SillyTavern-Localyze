@@ -242,7 +242,7 @@ function bindHandlers() {
     // Guidance Popup Handler
     $('#lz-settings').on('click', '.lz-info-icon', function () {
         const guidance = $(this).data('guidance');
-        callPopup(`<h3>${translate('Vistalyze Guidance')}</h3><p>${guidance}</p>`, 'text');
+        callPopup(`<h3>${translate('vistalyze.settings.guidance_title')}</h3><p>${guidance}</p>`, 'text');
     });
 
     $('#lz-settings').on('input', '.lz-history-input', function () {
@@ -290,13 +290,13 @@ function bindHandlers() {
         const $btn = $(this);
         const $status = $('#lz-img-test-status');
         const originalHtml = $btn.html();
-        $btn.prop('disabled', true).text('Generating...');
+        $btn.prop('disabled', true).text(translate('vistalyze.settings.btn_testing'));
         $status.text('');
         try {
             const objectUrl = await fetchPreviewBlob('a glowing lantern on a wooden tavern table, cinematic lighting');
             $status.html('<span style="color:var(--SmartThemeQuoteColor,#28a745);">✓ Connected</span>');
             await callPopup(
-                `<h3 style="margin-top:0;">${translate('Vistalyze — Connection OK')}</h3>
+                `<h3 style="margin-top:0;">${translate('vistalyze.settings.connection_ok_title')}</h3>
                  <img src="${objectUrl}" style="width:100%;border-radius:6px;margin-top:8px;" />`,
                 'text',
             );
@@ -332,7 +332,7 @@ function bindHandlers() {
         const originalHtml = $btn.html();
 
         try {
-            $btn.html(`<i class="fa-solid fa-spinner fa-spin"></i> ${translate('Auditing...')}`);
+            $btn.html(`<i class="fa-solid fa-spinner fa-spin"></i> ${translate('vistalyze.settings.btn_auditing')}`);
 
             const res = await fetch('/api/backgrounds/all', {
                 method: 'POST',

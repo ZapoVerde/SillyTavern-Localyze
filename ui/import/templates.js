@@ -25,6 +25,7 @@
  */
 
 import { escapeHtml } from '../../utils/history.js';
+import { translate } from '../../../../../i18n.js';
 
 /**
  * Renders the initial character selection grid.
@@ -32,7 +33,7 @@ import { escapeHtml } from '../../utils/history.js';
  * @returns {string}
  */
 export function getCharacterGridHTML(characters) {
-    if (!characters.length) return `<p style="text-align:center; opacity:0.5; padding:40px;">No characters found.</p>`;
+    if (!characters.length) return `<p style="text-align:center; opacity:0.5; padding:40px;">${translate('vistalyze.import.no_characters')}</p>`;
 
     const items = characters.map(c => `
         <div class="lz-import-char-card" data-avatar="${escapeHtml(c.avatar)}" data-name="${escapeHtml(c.name)}"

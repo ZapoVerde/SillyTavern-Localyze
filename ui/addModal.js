@@ -135,20 +135,20 @@ export async function openAddModal(def) {
 
         const btn = $(this)
         const status = $('#lz-preview-status')
-        btn.prop('disabled', true).text(translate('Fetching...'))
+        btn.prop('disabled', true).text(translate('vistalyze.add_modal.status_fetching'))
         status.text('')
 
         try {
             const objectUrl = await fetchPreviewBlob(visuals)
             $('#lz-preview-container').show()
             $('#lz-preview-img').attr('src', objectUrl)
-            status.text(translate('320×180 preview ready'))
+            status.text(translate('vistalyze.add_modal.preview_ready'))
         } catch (err) {
             error('Preview', 'failed:', err)
             status.text(t`Failed: ${err.message}`)
             if (window.toastr) window.toastr.warning(err.message, 'Vistalyze Preview')
         } finally {
-            btn.prop('disabled', false).text(translate('Generate Preview'))
+            btn.prop('disabled', false).text(translate('vistalyze.add_modal.btn_preview'))
         }
     })
 

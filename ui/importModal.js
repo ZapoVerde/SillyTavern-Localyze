@@ -40,10 +40,10 @@ function injectImportModal() {
         <div class="lz-modal" style="width: 700px; height: 70vh;">
             <div class="lz-workshop-header">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <h3 id="lz-import-title" style="margin:0;">${translate('Global Library')}</h3>
+                    <h3 id="lz-import-title" style="margin:0;">${translate('vistalyze.import.title')}</h3>
                     <div id="lz-import-controls" style="display:flex; gap:10px;">
                         <button id="lz-import-back" class="menu_button lz-hidden" style="padding:4px 10px;">
-                            <i class="fa-solid fa-arrow-left"></i> ${translate('Back')}
+                            <i class="fa-solid fa-arrow-left"></i> ${translate('vistalyze.import.back')}
                         </button>
                         <i id="lz-import-close" class="fa-solid fa-xmark" style="cursor:pointer; font-size:1.4em; opacity:0.6;"></i>
                     </div>
@@ -73,7 +73,7 @@ function injectImportModal() {
  * Transitions the view to the Character Grid.
  */
 export function renderCharacters() {
-    $('#lz-import-title').text(translate('Global Library'));
+    $('#lz-import-title').text(translate('vistalyze.import.title'));
     $('#lz-import-back').addClass('lz-hidden');
     
     const characters = getAvailableCharacters();
@@ -99,7 +99,7 @@ export function renderChats(charName, avatarUrl, chatSummaries) {
     $('#lz-import-current-name').val(charName);
 
     if (chatSummaries.length === 0) {
-        $('#lz-import-body').html(`<p style="text-align:center; opacity:0.5; padding:40px;">${translate('No Vistalyze locations found for this character.')}</p>`);
+        $('#lz-import-body').html(`<p style="text-align:center; opacity:0.5; padding:40px;">${translate('vistalyze.import.no_locations')}</p>`);
         return;
     }
 

@@ -183,7 +183,7 @@ async function handleUnknownLocation(messageId, context) {
     let confirmed = s.autoAcceptLocation;
     if (!confirmed) {
         confirmed = await callPopup(
-            `<h3>${translate('New location detected:')} ${escapeHtml(def.name)}</h3>
+            `<h3>${translate('vistalyze.pipeline.new_location_title')} ${escapeHtml(def.name)}</h3>
             <p><em>${escapeHtml(def.description)}</em></p>
             <p style="font-size:0.9em; opacity:0.8;">${escapeHtml(def.imagePrompt)}</p>`,
             'confirm'

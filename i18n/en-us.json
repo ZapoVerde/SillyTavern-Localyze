@@ -1,5 +1,6 @@
 {
     "vistalyze.settings.header": "Vistalyze",
+    "vistalyze.settings.enabled_label": "Enable Vistalyze",
     "vistalyze.settings.parallax_label": "Parallax backgrounds",
     "vistalyze.settings.parallax_hint": "Pans wide images horizontally with mouse or tilt on narrow screens",
     "vistalyze.settings.profile_select_title": "Active settings profile",
@@ -32,6 +33,15 @@
     "vistalyze.settings.btn_audit_images": "Audit Images",
     "vistalyze.settings.label_verbose_logging": "Verbose logging",
     "vistalyze.settings.verbose_logging_hint": "Logs pipeline steps and AI calls to the browser console",
+    "vistalyze.settings.guidance_title": "Vistalyze Guidance",
+    "vistalyze.settings.connection_ok_title": "Vistalyze — Connection OK",
+    "vistalyze.settings.btn_auditing": "Auditing...",
+    "vistalyze.settings.btn_testing": "Generating...",
+
+    "vistalyze.profile.new_name_title": "New profile name",
+    "vistalyze.profile.rename_title": "Rename profile",
+    "vistalyze.profile.delete_title": "Delete profile",
+    "vistalyze.profile.confirm_irreversible": "This cannot be undone.",
 
     "vistalyze.workshop.title": "Location Workshop",
     "vistalyze.workshop.label_session": "Session:",
@@ -48,11 +58,11 @@
     "vistalyze.workshop.apply_title": "Apply Location",
     "vistalyze.workshop.edit_title": "Edit in Architect",
     "vistalyze.workshop.delete_title": "Delete Location",
+    "vistalyze.workshop.select_bg_title": "Select existing background",
     "vistalyze.workshop.label_name": "Location Name",
     "vistalyze.workshop.label_definition": "Definition (Logic)",
     "vistalyze.workshop.regen_logic_title": "Regenerate logic from context",
     "vistalyze.workshop.label_visuals": "Visuals (Image Prompt)",
-    "vistalyze.workshop.regen_prompt_title": "Regenerate prompt from definition",
     "vistalyze.workshop.btn_preview": "Thumbnail Preview",
     "vistalyze.workshop.label_current_bg": "Current Background",
     "vistalyze.workshop.architect_empty": "Select a location from the Library or use the Explorer to start refining.",
@@ -61,12 +71,21 @@
     "vistalyze.workshop.explorer_placeholder": "Optional keywords (e.g. 'A dark damp cave')...",
     "vistalyze.workshop.btn_discover": "Discover Location",
     "vistalyze.workshop.explorer_status": "Analyzing roleplay context...",
+    "vistalyze.workshop.proposed_label": "Proposed",
+    "vistalyze.workshop.full_res_label": "Full Resolution",
+    "vistalyze.workshop.selected_gallery_label": "Selected from Gallery",
+    "vistalyze.workshop.status_generating": "Generating...",
+    "vistalyze.workshop.warn_no_location": "Select a location first.",
+    "vistalyze.workshop.warn_no_architect_location": "Select a location in the Architect tab first.",
+    "vistalyze.workshop.warn_no_discovery": "Could not discover a new location from current context.",
+    "vistalyze.workshop.this_location": "this location",
 
     "vistalyze.import.title": "Global Library",
     "vistalyze.import.back": "Back",
     "vistalyze.import.scanning": "Scanning Archives...",
     "vistalyze.import.scan_failed": "Scan failed. See console.",
     "vistalyze.import.inventory": "chat log inventory",
+    "vistalyze.import.no_characters": "No characters found.",
     "vistalyze.import.no_locations": "No Vistalyze locations found for this character.",
     "vistalyze.import.import_all_title": "Import all locations from this chat",
     "vistalyze.import.btn_all": "Import All",
@@ -86,14 +105,6 @@
     "vistalyze.import.more": "more...",
     "vistalyze.import.success_count": "Imported {{count}} locations successfully.",
 
-    "Global Library": "Global Library",
-    "Back": "Back",
-    "Worlds of": "Worlds of",
-    "No Vistalyze locations found for this character.": "No Vistalyze locations found for this character.",
-    "Scanning Archives...": "Scanning Archives...",
-    "Scan failed. See console.": "Scan failed. See console.",
-    "Imports:": "Imports:",
-
     "vistalyze.add_modal.title": "Add Location to Library",
     "vistalyze.add_modal.label_name": "Location Name",
     "vistalyze.add_modal.label_key": "Key (Unique ID)",
@@ -101,8 +112,8 @@
     "vistalyze.add_modal.label_visuals": "Visuals (Image Prompt)",
     "vistalyze.add_modal.btn_preview": "Generate Preview",
     "vistalyze.add_modal.btn_use_existing": "Pick from Gallery",
-    "vistalyze.add_modal.btn_yes": "Yes",
-    "vistalyze.add_modal.btn_cancel": "Cancel",
+    "vistalyze.add_modal.status_fetching": "Fetching...",
+    "vistalyze.add_modal.preview_ready": "320×180 preview ready",
 
     "vistalyze.edit_modal.title": "Edit Location:",
     "vistalyze.edit_modal.label_key_const": "Key:",
@@ -114,6 +125,7 @@
     "vistalyze.edit_modal.check_update_bg_title": "If checked, the background will be overwritten with a new generation on save.",
     "vistalyze.edit_modal.check_update_bg": "Update Background Image",
     "vistalyze.edit_modal.preview_hint": "512x512 preview result:",
+    "vistalyze.edit_modal.status_generating": "Generating...",
 
     "vistalyze.picker.title": "Location Library",
     "vistalyze.picker.search_placeholder": "Search locations...",
@@ -126,6 +138,8 @@
     "vistalyze.orphan.hint": "These files belong to sessions not found in any known chat.",
     "vistalyze.orphan.select_all_title": "Select All",
     "vistalyze.orphan.label_filename": "Filename",
+    "vistalyze.orphan.warn_no_selection": "No files selected.",
+    "vistalyze.orphan.success_no_orphans": "No orphaned images found.",
 
     "vistalyze.prompt_modal.available_vars": "Available variables:",
     "vistalyze.prompt_modal.placeholder_hint": "Use {{placeholders}} as shown in the default prompt.",
@@ -135,5 +149,11 @@
     "vistalyze.badge.change_location": "Change location for this message",
 
     "vistalyze.toolbar.title": "Vistalyze",
-    "vistalyze.toolbar.label": "Vistalyze"
+    "vistalyze.toolbar.label": "Vistalyze",
+
+    "vistalyze.bgHijacker.cancel_label": "Return to Vistalyze (Cancel Selection)",
+
+    "vistalyze.pipeline.new_location_title": "New location detected:",
+
+    "vistalyze.parallax.enable_tilt_btn": "✦ Enable tilt parallax"
 }
