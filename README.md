@@ -2,6 +2,8 @@
 
 **Vistalyze** is a SillyTavern extension that brings your roleplay to life by automatically detecting location changes and generating cinematic background images through SillyTavern's built-in Image Generation extension.
 
+<img src="docs/vistalyze_wzdx7ebx_noli_s_garden.png" width="800" alt="Hero Example">
+
 ## 🔑 Setup & Requirements
 
 Vistalyze delegates all image generation to SillyTavern's native **Image Generation** extension (the "stable-diffusion" extension bundled with ST). This means:
@@ -15,6 +17,9 @@ Vistalyze delegates all image generation to SillyTavern's native **Image Generat
 1. **Image provider**: Open ST's **Image Generation** settings (Extensions panel → Image Generation) and configure your preferred provider and API key.
 2. **LLM connections**: In the Vistalyze settings panel, assign an LLM to each detection step (see model guidance below).
 3. **Image source in Vistalyze**: Under **Image Generation** in Vistalyze settings, select the same source you configured in ST and pick a model. Use **Test Generation** to confirm everything is wired up.
+
+<img src="docs/Settings1.png" width="800" alt="Vistalyze Settings Panel">
+<img src="docs/Providers.png" width="800" alt="Supported Providers">
 
 ---
 
@@ -101,7 +106,6 @@ Background generation uses a **Two-Write Pattern**: the location transition is r
 
 - **No external databases**: Locations, descriptions, and history are stored inside your chat log (`.jsonl`) file.
 - **Fork-safe**: Duplicate or move a chat and the entire location history moves with it.
-- **Manual override respected**: Vistalyze will never overwrite a background you set manually using ST's native tools.
 
 ---
 
@@ -120,3 +124,7 @@ Background generation uses a **Two-Write Pattern**: the location transition is r
 - **"Unsupported source" error?** Local sources (A1111, ComfyUI, etc.) require a running local server and are not supported for background generation. Switch to a cloud provider.
 - **Orphaned images?** Use **Audit Images** in Vistalyze settings (Maintenance section) to find and delete background files from deleted chats.
 - **LLM failing?** Step 1 can use a very small, cheap model. Steps 2–4 run less frequently but benefit from a more capable model.
+
+
+<img src="docs/vistalyze_ymm8b6c1_the_manor_patio.png" width="800" alt="Location Example">
+<img src="docs/vistalyze_nkpv3z91_the_old_scriptorium.png" width="800" alt="Location Example">
