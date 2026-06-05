@@ -92,11 +92,11 @@ Located in your top toolbar, the **Workshop** is your command center for managin
 
 ## 🧠 How It Works
 
-Vistalyze uses a "falling water" pipeline to minimise LLM cost:
+Every AI message triggers a short cascade of LLM calls. Each step only runs if the previous one indicates it is needed:
 
-1. **Step 1 — The Gate**: Fast YES/NO check. "Has the location changed?" If no, the pipeline stops immediately.
-2. **Step 2 — The Library**: If yes, check the existing library. "Is this somewhere we've been before?" If matched, apply it and stop.
-3. **Step 3 — The Architect**: Only if the location is brand new does the AI write a full visual description and queue image generation.
+1. **Has the location changed?** A fast boolean check on every message. If no, the pipeline stops — no further calls are made.
+2. **Is this location already known?** If a change is detected, a classifier checks whether the new location matches one already in your library. If it does, that entry is applied and the pipeline stops.
+3. **Describe the new location.** Only runs for locations that are genuinely new. The AI writes a visual description, which is used as the image generation prompt.
 
 Background generation uses a **Two-Write Pattern**: the location transition is recorded immediately, the image is generated asynchronously, and the record is patched once the file is safely on disk. If a generation fails, it is automatically retried next time you open the chat.
 
