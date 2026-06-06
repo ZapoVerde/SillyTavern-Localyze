@@ -1,5 +1,7 @@
 # 📍 Vistalyze
 
+**[Released]**
+
 **Vistalyze** is a SillyTavern extension that brings your roleplay to life by automatically detecting location changes and generating cinematic background images through SillyTavern's built-in Image Generation extension.
 
 <img src="docs/vistalyze_wzdx7ebx_noli_s_garden.png" width="800" alt="Hero Example">
