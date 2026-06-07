@@ -33,6 +33,7 @@ import { getSettings } from './settings/data.js'
 import {
     DEFAULT_IMAGE_SOURCE,
     DEFAULT_IMAGE_PROMPT_TEMPLATE,
+    DEFAULT_COMFYUI_URL,
 } from './defaults.js'
 
 // ─── Source routing tables ────────────────────────────────────────────────────
@@ -69,7 +70,63 @@ const GENERATION_ENDPOINTS = {
 }
 
 /** Sources that require a local server — unsupported for background generation. */
-const LOCAL_SOURCES = new Set(['extras', 'horde', 'auto', 'vlad', 'sdcpp', 'drawthings', 'comfy', 'novel'])
+const LOCAL_SOURCES = new Set(['extras', 'horde', 'auto', 'vlad', 'sdcpp', 'drawthings', 'novel'])
+
+// ─── ComfyUI via ST proxy ─────────────────────────────────────────────────────
+
+/**
+ * Traces the workflow graph to find the node ID of the positive prompt.
+ * Follows the KSampler's 'positive' input back to its CLIPTextEncode source.
+ * Falls back to the first CLIPTextEncode if no sampler is found.
+ */
+function findPositivePromptNodeId(workflow) {
+    const samplerClasses = ['KSampler', 'KSamplerAdvanced']
+    for (const [, node] of Object.entries(workflow)) {
+        if (samplerClasses.includes(node.class_type)) {
+            const positiveInput = node.inputs?.positive
+            if (Array.isArray(positiveInput)) return String(positiveInput[0])
+        }
+    }
+    for (const [nodeId, node] of Object.entries(workflow)) {
+        if (node.class_type === 'CLIPTextEncode') return nodeId
+    }
+    return null
+}
+
+/**
+ * Generates an image by loading the user's default ST ComfyUI workflow,
+ * injecting the prompt into the positive CLIPTextEncode node, and submitting
+ * it via ST's server-side ComfyUI proxy.
+ * Returns { image: base64string, format } to match callImageProxy's shape.
+ */
+async function generateViaComfy(prompt, comfyUiUrl) {
+    const workflowRes = await fetch('/api/sd/comfy/workflow', {
+        method: 'POST',
+        headers: getRequestHeaders(),
+        body: JSON.stringify({}),
+    })
+    if (!workflowRes.ok) throw new Error('Could not load default ComfyUI workflow from ST. Make sure a workflow is saved in the Image Generation panel.')
+
+    const workflow = await workflowRes.json()
+
+    const nodeId = findPositivePromptNodeId(workflow)
+    if (!nodeId) throw new Error('Could not find a CLIPTextEncode prompt node in the ComfyUI workflow.')
+
+    workflow[nodeId].inputs.text = prompt
+
+    const genRes = await fetch('/api/sd/comfy/generate', {
+        method: 'POST',
+        headers: getRequestHeaders(),
+        body: JSON.stringify({ url: comfyUiUrl, prompt: JSON.stringify(workflow) }),
+    })
+    if (!genRes.ok) {
+        const text = await genRes.text()
+        throw new Error(`ComfyUI generation failed: ${text}`)
+    }
+
+    const data = await genRes.json()
+    return { image: data.data, format: data.format ?? 'png' }
+}
 
 // ─── Request builders ─────────────────────────────────────────────────────────
 
@@ -111,6 +168,10 @@ async function callImageProxy(prompt, overrides = {}) {
     const model    = s.imageModel  ?? ''
     const width    = overrides.width  ?? 1920
     const height   = overrides.height ?? 1080
+
+    if (source === 'comfy') {
+        return generateViaComfy(prompt, s.comfyUiUrl ?? DEFAULT_COMFYUI_URL)
+    }
 
     if (LOCAL_SOURCES.has(source)) {
         throw new Error(
