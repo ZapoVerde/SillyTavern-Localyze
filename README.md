@@ -60,9 +60,37 @@ Sources with a fixed model list (type the model name manually):
 
 `Stability AI` · `BFL (FLUX)` · `OpenAI (DALL-E / GPT-Image)` · `xAI (Grok)` · `Z.AI` · `HuggingFace`
 
-Sources requiring a **local server** are not supported for background generation:
+**ComfyUI** (local) is supported — see the [ComfyUI Setup](#️-comfyui-setup) section below.
 
-`Auto (A1111)` · `SD.cpp` · `ComfyUI` · `DrawThings` · `Horde` · `NovelAI` · `Extras`
+The following local sources are **not** supported for background generation:
+
+`Auto (A1111)` · `SD.cpp` · `DrawThings` · `Horde` · `NovelAI` · `Extras`
+
+---
+
+## 🖥️ ComfyUI Setup
+
+Vistalyze can generate backgrounds using a locally running ComfyUI instance. It works by loading the default workflow you already have saved in ST's Image Generation panel and injecting the location prompt into it — no extra configuration of the workflow is needed inside Vistalyze.
+
+### Requirements
+
+- ComfyUI running and reachable from your browser (default: `http://127.0.0.1:8188`)
+- A default workflow saved in ST's **Image Generation** extension (Extensions → Image Generation → ComfyUI tab → save your workflow there)
+- The workflow must use a standard **KSampler** node — Vistalyze traces the graph from the sampler to find the positive prompt node automatically
+
+### Setup Steps
+
+1. In ST's Image Generation panel, select **ComfyUI** as the source, point it at your running instance, and save a working workflow as the default.
+2. In the **Vistalyze** settings panel, open **Image Generation** and set **Source** to `ComfyUI`.
+3. Set the **URL** field to your ComfyUI address (default `http://127.0.0.1:8188`).
+4. Click **Test Generation** to confirm the connection.
+
+### Image Size
+
+Vistalyze generates backgrounds at whatever resolution your workflow is set to. For best quality, configure your workflow to output **1920×1080** (or another widescreen resolution). Smaller images will still display correctly — ST scales backgrounds to fill the screen with CSS `cover` — but they may appear softer on large monitors.
+
+> [!NOTE]
+> This feature is new and lightly tested. If you run into issues, please report them in the project's GitHub issues with your ComfyUI version and workflow type.
 
 ---
 
@@ -123,7 +151,7 @@ Background generation uses a **Two-Write Pattern**: the location transition is r
 ## ❓ Troubleshooting
 
 - **Test Generation failing?** Check that your API key is saved in ST's Image Generation extension and that the Source and Model in Vistalyze match.
-- **"Unsupported source" error?** Local sources (A1111, ComfyUI, etc.) require a running local server and are not supported for background generation. Switch to a cloud provider.
+- **"Unsupported source" error?** Some local sources (A1111, DrawThings, etc.) are not supported for background generation. Switch to a cloud provider, or use ComfyUI (see [ComfyUI Setup](#️-comfyui-setup)).
 - **Orphaned images?** Use **Audit Images** in Vistalyze settings (Maintenance section) to find and delete background files from deleted chats.
 - **LLM failing?** Step 1 can use a very small, cheap model. Steps 2–4 run less frequently but benefit from a more capable model.
 
