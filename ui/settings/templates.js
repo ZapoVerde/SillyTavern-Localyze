@@ -66,10 +66,14 @@ export function buildCallRow(id, label, promptKey, profileKey, historyKey = null
             <div class="lz-profile-row" style="display:flex;align-items:center;gap:8px;">
                 <label style="opacity:0.75;white-space:nowrap;" data-i18n="vistalyze.settings.label_connection">Connection:</label>
                 <select id="lz-profile-${safeId}" class="text_pole lz-step-profile-select" data-profile-key="${safeProfileKey}" style="flex:1;"></select>
+                <button class="menu_button lz-profile-test-btn" data-step-id="${safeId}"
+                    title="Send a test message to this connection"
+                    style="white-space:nowrap;">Test</button>
                 <button class="menu_button lz-open-prompt" data-prompt-key="${safePromptKey}"
                     data-i18n="vistalyze.settings.btn_edit_prompt"
                     style="white-space:nowrap;">Edit Prompt</button>
             </div>
+            <div id="lz-profile-test-status-${safeId}" style="margin-top:4px;font-size:0.85em;min-height:1.2em;"></div>
             ${historyRow}
             ${extraContent}
         </div>

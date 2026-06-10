@@ -23,7 +23,7 @@
  *     external_io: [#extensions_settings DOM, settings/data.js, callPopup]
  */
 
-import { getRequestHeaders, callPopup } from '../../../../../script.js';
+import { getRequestHeaders, callPopup, generateQuietPrompt } from '../../../../../script.js';
 import { t, translate } from '../../../../i18n.js';
 import { warn, error, setVerboseLogging } from '../utils/logger.js';
 import { runFullAudit } from '../orphanDetector.js';
@@ -47,6 +47,7 @@ import {
     DEFAULT_COMFYUI_URL,
 } from '../defaults.js';
 import { loadModelsForSource, fetchPreviewBlob } from '../imageCache.js';
+import { escapeHtml } from '../utils/history.js';
 
 import { buildPanelHTML } from '../ui/settings/templates.js';
 import { openPromptModal } from '../ui/settings/promptModal.js';
@@ -256,7 +257,7 @@ function bindHandlers() {
     // Guidance Popup Handler
     $('#lz-settings').on('click', '.lz-info-icon', function () {
         const guidance = $(this).data('guidance');
-        callPopup(`<h3>${translate('vistalyze.settings.guidance_title')}</h3><p>${guidance}</p>`, 'text');
+        callPopup(`<h3>${translate('Vistalyze Guidance', 'vistalyze.settings.guidance_title')}</h3><p>${guidance}</p>`, 'text');
     });
 
     $('#lz-settings').on('input', '.lz-history-input', function () {
@@ -309,18 +310,63 @@ function bindHandlers() {
         const $btn = $(this);
         const $status = $('#lz-img-test-status');
         const originalHtml = $btn.html();
-        $btn.prop('disabled', true).text(translate('vistalyze.settings.btn_testing'));
+        $btn.prop('disabled', true).text(translate('Generating...', 'vistalyze.settings.btn_testing'));
         $status.text('');
         try {
             const objectUrl = await fetchPreviewBlob('a glowing lantern on a wooden tavern table, cinematic lighting');
             $status.html('<span style="color:var(--SmartThemeQuoteColor,#28a745);">✓ Connected</span>');
             await callPopup(
-                `<h3 style="margin-top:0;">${translate('vistalyze.settings.connection_ok_title')}</h3>
+                `<h3 style="margin-top:0;">${translate('Vistalyze — Connection OK', 'vistalyze.settings.connection_ok_title')}</h3>
                  <img src="${objectUrl}" style="width:100%;border-radius:6px;margin-top:8px;" />`,
                 'text',
             );
         } catch (err) {
             $status.html(`<span style="color:var(--SmartThemeErrorColor,#dc3545);">✗ ${err.message.slice(0, 120)}</span>`);
+        } finally {
+            $btn.prop('disabled', false).html(originalHtml);
+        }
+    });
+
+    $('#lz-settings').on('click', '.lz-profile-test-btn', async function () {
+        const stepId = $(this).data('step-id');
+        const $btn = $(this);
+        const $status = $(`#lz-profile-test-status-${stepId}`);
+        const profileId = $(`#lz-profile-${stepId}`).val() || null;
+        const originalHtml = $btn.html();
+
+        $btn.prop('disabled', true).text('Testing…');
+        $status.text('');
+
+        const testPrompt = 'Reply with the single word: CONNECTED';
+        let profileLabel = 'main chat LLM';
+
+        try {
+            let result;
+            if (profileId) {
+                try {
+                    profileLabel = ConnectionManagerRequestService.getProfile(profileId)?.name ?? profileId;
+                } catch { /* name lookup is best-effort */ }
+                result = await ConnectionManagerRequestService.sendRequest(profileId, testPrompt, null);
+            } else {
+                result = await generateQuietPrompt({ quietPrompt: testPrompt, removeReasoning: true });
+            }
+
+            const text = String(result?.content ?? result ?? '').trim();
+            $status.html('<span style="color:var(--SmartThemeQuoteColor,#28a745);">&#10003; Connected</span>');
+            await callPopup(
+                `<h3 style="margin-top:0;">Connection OK</h3>
+                 <p style="opacity:0.7;font-size:0.9em;margin:4px 0 10px;">Profile: ${escapeHtml(profileLabel)}</p>
+                 <pre style="background:var(--SmartThemeBlurTintColor,#1a1a1a);padding:10px;border-radius:6px;white-space:pre-wrap;word-break:break-word;">${escapeHtml(text)}</pre>`,
+                'text',
+            );
+        } catch (err) {
+            $status.html(`<span style="color:var(--SmartThemeErrorColor,#dc3545);">&#10007; ${escapeHtml(err.message.slice(0, 120))}</span>`);
+            await callPopup(
+                `<h3 style="margin-top:0;">Connection Failed</h3>
+                 <p style="opacity:0.7;font-size:0.9em;margin:4px 0 10px;">Profile: ${escapeHtml(profileLabel)}</p>
+                 <p style="color:var(--SmartThemeErrorColor,#dc3545);word-break:break-word;">${escapeHtml(err.message)}</p>`,
+                'text',
+            );
         } finally {
             $btn.prop('disabled', false).html(originalHtml);
         }
@@ -351,7 +397,7 @@ function bindHandlers() {
         const originalHtml = $btn.html();
 
         try {
-            $btn.html(`<i class="fa-solid fa-spinner fa-spin"></i> ${translate('vistalyze.settings.btn_auditing')}`);
+            $btn.html(`<i class="fa-solid fa-spinner fa-spin"></i> ${translate('Auditing...', 'vistalyze.settings.btn_auditing')}`);
 
             const res = await fetch('/api/backgrounds/all', {
                 method: 'POST',
