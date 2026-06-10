@@ -10,7 +10,8 @@
  * - Added DEFAULT_AUTO_ACCEPT_DESCRIPTION for Gate 2 pipeline bypass.
  *
  * @api-declaration
- * DEFAULT_IMAGE_MODEL
+ * DEFAULT_IMAGE_SOURCE
+ * DEFAULT_COMFYUI_URL
  * DEFAULT_IMAGE_PROMPT_TEMPLATE
  * DEFAULT_AUTO_ACCEPT_LOCATION
  * DEFAULT_AUTO_ACCEPT_DESCRIPTION
@@ -26,6 +27,9 @@
 
 /** Default image source — routes through the ST SD extension proxy. */
 export const DEFAULT_IMAGE_SOURCE = 'pollinations'
+
+/** Default ComfyUI server URL for direct workflow generation. */
+export const DEFAULT_COMFYUI_URL = 'http://127.0.0.1:8188'
 
 /** Image prompt template. Interpolated by imageCache.js. */
 export const DEFAULT_IMAGE_PROMPT_TEMPLATE = 

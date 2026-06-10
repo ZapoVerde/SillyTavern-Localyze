@@ -44,6 +44,7 @@ import {
     DEFAULT_DISCOVERY_PROMPT,
     DEFAULT_IMAGE_PROMPT_TEMPLATE,
     DEFAULT_IMAGE_SOURCE,
+    DEFAULT_COMFYUI_URL,
 } from '../defaults.js';
 import { loadModelsForSource, fetchPreviewBlob } from '../imageCache.js';
 
@@ -90,6 +91,18 @@ function initDropdowns() {
 // ─── UI Population ──────────────────────────────────────────────────────────
 
 async function refreshModelControl(source, currentModel) {
+    const $modelRow = $('#lz-image-model-row');
+    const $comfyRow = $('#lz-comfyui-url-row');
+
+    if (source === 'comfy') {
+        $modelRow.hide();
+        $comfyRow.css('display', 'flex');
+        return;
+    }
+
+    $comfyRow.hide();
+    $modelRow.show();
+
     const models  = await loadModelsForSource(source);
     const $select = $('#lz-image-model');
     const $text   = $('#lz-image-model-text');
@@ -134,6 +147,7 @@ function populateInputs() {
         });
     }
     $lzSource.val(s.imageSource ?? DEFAULT_IMAGE_SOURCE);
+    $('#lz-comfyui-url').val(s.comfyUiUrl ?? DEFAULT_COMFYUI_URL);
 
     refreshModelControl(s.imageSource ?? DEFAULT_IMAGE_SOURCE, s.imageModel);
 
@@ -283,6 +297,11 @@ function bindHandlers() {
 
     $('#lz-settings').on('input', '#lz-image-model-text', function () {
         updateActiveSetting('imageModel', $(this).val().trim() || null);
+        updateDirtyIndicator(meta);
+    });
+
+    $('#lz-settings').on('input', '#lz-comfyui-url', function () {
+        updateActiveSetting('comfyUiUrl', $(this).val().trim() || DEFAULT_COMFYUI_URL);
         updateDirtyIndicator(meta);
     });
 

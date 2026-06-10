@@ -161,13 +161,18 @@ export function buildPanelHTML() {
                             <label style="opacity:0.75;white-space:nowrap;min-width:80px;">Source:</label>
                             <select id="lz-image-source" class="text_pole" style="flex:1;"></select>
                         </div>
-                        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                        <div id="lz-image-model-row" style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
                             <label style="opacity:0.75;white-space:nowrap;min-width:80px;" data-i18n="vistalyze.settings.label_model">Model:</label>
                             <div style="flex:1;display:flex;">
                                 <select id="lz-image-model" class="text_pole" style="flex:1;display:none;"></select>
                                 <input id="lz-image-model-text" type="text" class="text_pole"
                                        placeholder="Enter model name..." style="flex:1;display:none;" />
                             </div>
+                        </div>
+                        <div id="lz-comfyui-url-row" style="display:none;align-items:center;gap:8px;margin-bottom:4px;">
+                            <label style="opacity:0.75;white-space:nowrap;min-width:80px;">URL:</label>
+                            <input id="lz-comfyui-url" type="text" class="text_pole"
+                                   placeholder="http://127.0.0.1:8188" style="flex:1;" />
                         </div>
                         <div style="display:flex;align-items:center;gap:8px;">
                             <label style="opacity:0.75;white-space:nowrap;min-width:80px;" data-i18n="vistalyze.settings.label_prompt_template">Prompt:</label>
