@@ -110,7 +110,7 @@ function _maybeRequestTilt() {
 
         const btn = document.createElement('button')
         btn.id = 'lz-tilt-prompt'
-        btn.textContent = translate('vistalyze.parallax.enable_tilt_btn')
+        btn.textContent = translate('✦ Enable tilt parallax', 'vistalyze.parallax.enable_tilt_btn')
         btn.style.cssText = [
             'position:fixed', 'bottom:80px', 'left:50%',
             'transform:translateX(-50%)', 'z-index:9999',

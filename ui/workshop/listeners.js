@@ -69,7 +69,7 @@ export function bindWorkshopEvents(handlers) {
     $overlay.on('click', '#lz-workshop-alt-bg', async function() {
         const key = state._activeWorkshopKey;
         if (!key || !state._draftLocations[key]) {
-            if (window.toastr) window.toastr.warning(translate('vistalyze.workshop.warn_no_location'));
+            if (window.toastr) window.toastr.warning(translate('Select a location first.', 'vistalyze.workshop.warn_no_location'));
             return;
         }
 
@@ -150,7 +150,7 @@ export function bindWorkshopEvents(handlers) {
     $overlay.on('click', '.lz-lib-delete', function(e) {
         e.stopPropagation();
         const key = $(this).closest('.lz-library-item').data('key');
-        const name = state._draftLocations[key]?.name || translate('vistalyze.workshop.this_location');
+        const name = state._draftLocations[key]?.name || translate('this location', 'vistalyze.workshop.this_location');
         
         if (confirm(t`Remove "${name}" from the library?`)) {
             deleteDraftLocation(key);
@@ -240,19 +240,19 @@ export function bindWorkshopEvents(handlers) {
     $overlay.on('click', '#lz-arch-finalize', async function() {
         const key = state._activeWorkshopKey;
         if (!key) {
-            if (window.toastr) window.toastr.warning(translate('vistalyze.workshop.warn_no_architect_location'), 'Vistalyze');
+            if (window.toastr) window.toastr.warning(translate('Select a location in the Architect tab first.', 'vistalyze.workshop.warn_no_architect_location'), 'Vistalyze');
             return;
         }
         const { handleFinalizeWorkshop } = await import('../../logic/commit.js');
         const $btn = $(this);
 
-        $btn.prop('disabled', true).text(translate('vistalyze.workshop.status_generating'));
+        $btn.prop('disabled', true).text(translate('Generating...', 'vistalyze.workshop.status_generating'));
         try {
             await handleFinalizeWorkshop(key);
-            $btn.prop('disabled', false).text(translate('vistalyze.workshop.btn_finalize'));
+            $btn.prop('disabled', false).text(translate('Apply and Finalize', 'vistalyze.workshop.btn_finalize'));
             $overlay.addClass('lz-hidden');
         } catch (err) {
-            $btn.prop('disabled', false).text(translate('vistalyze.workshop.btn_finalize'));
+            $btn.prop('disabled', false).text(translate('Apply and Finalize', 'vistalyze.workshop.btn_finalize'));
             error('Workshop', 'Commit failed:', err);
             if (window.toastr) window.toastr.error(t`Generation failed: ${err.message}`, 'Vistalyze');
         }
@@ -276,7 +276,7 @@ export function bindWorkshopEvents(handlers) {
                 switchTab('architect');
                 $('#lz-explorer-keywords').val('');
             } else {
-                if (window.toastr) window.toastr.warning(translate('vistalyze.workshop.warn_no_discovery'));
+                if (window.toastr) window.toastr.warning(translate('Could not discover a new location from current context.', 'vistalyze.workshop.warn_no_discovery'));
             }
         } catch (err) {
             error('Workshop', 'Discovery failed:', err);

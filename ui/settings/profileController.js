@@ -95,7 +95,7 @@ export function handleProfileSave(meta) {
  * Logic for creating a new profile.
  */
 export async function handleProfileAdd(meta, onRefresh) {
-    const rawName = await callPopup(`<h3>${translate('vistalyze.profile.new_name_title')}</h3>`, 'input', '');
+    const rawName = await callPopup(`<h3>${translate('New profile name', 'vistalyze.profile.new_name_title')}</h3>`, 'input', '');
     const name = (rawName ?? '').trim();
     if (!name) return;
 
@@ -113,7 +113,7 @@ export async function handleProfileAdd(meta, onRefresh) {
  * Logic for renaming the active profile.
  */
 export async function handleProfileRename(meta, onRefresh) {
-    const rawName = await callPopup(`<h3>${translate('vistalyze.profile.rename_title')}</h3>`, 'input', meta.currentProfileName);
+    const rawName = await callPopup(`<h3>${translate('Rename profile', 'vistalyze.profile.rename_title')}</h3>`, 'input', meta.currentProfileName);
     const newName = (rawName ?? '').trim();
     if (!newName || newName === meta.currentProfileName) return;
 
@@ -137,7 +137,7 @@ export async function handleProfileDelete(meta, onRefresh) {
     }
 
     const confirmed = await callPopup(
-        `<h3>${translate('vistalyze.profile.delete_title')} "${escapeHtml(meta.currentProfileName)}"?</h3>${translate('vistalyze.profile.confirm_irreversible')}`,
+        `<h3>${translate('Delete profile', 'vistalyze.profile.delete_title')} "${escapeHtml(meta.currentProfileName)}"?</h3>${translate('This cannot be undone.', 'vistalyze.profile.confirm_irreversible')}`,
         'confirm'
     );
     if (!confirmed) return;

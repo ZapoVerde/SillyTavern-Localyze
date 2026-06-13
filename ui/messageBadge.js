@@ -63,7 +63,7 @@ function renderBadge($mes, msgId) {
     const editIcon = locKey
         ? `<i class="fa-solid fa-pen-to-square lz-badge-edit"
                data-i18n="[title]vistalyze.badge.edit_architect"
-               title="${translate('vistalyze.badge.edit_architect')}"
+               title="${translate('Edit in Architect', 'vistalyze.badge.edit_architect')}"
                style="opacity:0.6; padding:0 2px; cursor:pointer;"></i>`
         : '';
 

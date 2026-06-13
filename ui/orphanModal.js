@@ -32,7 +32,7 @@ function escapeHtml(str) {
 
 export async function openOrphanModal(orphans) {
     if (!orphans || orphans.length === 0) {
-        if (window.toastr) window.toastr.success(translate('vistalyze.orphan.success_no_orphans'), 'Vistalyze')
+        if (window.toastr) window.toastr.success(translate('No orphaned images found.', 'vistalyze.orphan.success_no_orphans'), 'Vistalyze')
         return
     }
 
@@ -78,7 +78,7 @@ export async function openOrphanModal(orphans) {
 
     const selected = $('.lz-orphan-check:checked').map(function () { return this.value }).get()
     if (selected.length === 0) {
-        if (window.toastr) window.toastr.warning(translate('vistalyze.orphan.warn_no_selection'), 'Vistalyze')
+        if (window.toastr) window.toastr.warning(translate('No files selected.', 'vistalyze.orphan.warn_no_selection'), 'Vistalyze')
         return
     }
 

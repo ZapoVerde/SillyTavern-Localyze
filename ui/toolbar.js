@@ -39,9 +39,9 @@ export function injectToolbar(onOpenLibrary, onEdit) {
     const vistalyzeBtn = $(`
         <div id="lz-toolbar-btn" class="list-group-item flex-container flexGap5" 
              data-i18n="[title]vistalyze.toolbar.title"
-             title="${translate('vistalyze.toolbar.title')}">
+             title="${translate('Vistalyze', 'vistalyze.toolbar.title')}">
             <i class="fa-solid fa-location-dot"></i>
-            <span data-i18n="vistalyze.toolbar.label">${translate('vistalyze.toolbar.label')}</span>
+            <span data-i18n="vistalyze.toolbar.label">${translate('Vistalyze', 'vistalyze.toolbar.label')}</span>
         </div>
     `);
 

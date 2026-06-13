@@ -70,7 +70,7 @@ export async function openAddModal(def) {
 
     // Create the left-aligned action
     const $useExistingBtn = $(`<div id="lz-add-use-existing" class="menu_button" style="white-space:nowrap;">
-        <i class="fa-solid fa-images"></i> ${translate('vistalyze.add_modal.btn_use_existing')}
+        <i class="fa-solid fa-images"></i> ${translate('Pick from Gallery', 'vistalyze.add_modal.btn_use_existing')}
     </div>`);
 
     // Create the right-aligned group
@@ -135,20 +135,20 @@ export async function openAddModal(def) {
 
         const btn = $(this)
         const status = $('#lz-preview-status')
-        btn.prop('disabled', true).text(translate('vistalyze.add_modal.status_fetching'))
+        btn.prop('disabled', true).text(translate('Fetching...', 'vistalyze.add_modal.status_fetching'))
         status.text('')
 
         try {
             const objectUrl = await fetchPreviewBlob(visuals)
             $('#lz-preview-container').show()
             $('#lz-preview-img').attr('src', objectUrl)
-            status.text(translate('vistalyze.add_modal.preview_ready'))
+            status.text(translate('320×180 preview ready', 'vistalyze.add_modal.preview_ready'))
         } catch (err) {
             error('Preview', 'failed:', err)
             status.text(t`Failed: ${err.message}`)
             if (window.toastr) window.toastr.warning(err.message, 'Vistalyze Preview')
         } finally {
-            btn.prop('disabled', false).text(translate('vistalyze.add_modal.btn_preview'))
+            btn.prop('disabled', false).text(translate('Generate Preview', 'vistalyze.add_modal.btn_preview'))
         }
     })
 

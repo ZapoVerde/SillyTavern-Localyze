@@ -65,12 +65,12 @@ export async function renderArchitect() {
 
     if (!draft) {
         $container.html(getArchitectEmptyHTML());
-        $altBtn.text(translate('vistalyze.workshop.btn_hijack')).prop('disabled', true);
+        $altBtn.text(translate('Pick from Gallery', 'vistalyze.workshop.btn_hijack')).prop('disabled', true);
         return;
     }
 
     // Toggle footer button text based on draft customBg state
-    const altBtnText = draft.customBg ? translate('vistalyze.workshop.btn_clear_bg') : translate('vistalyze.workshop.btn_hijack');
+    const altBtnText = draft.customBg ? translate('Clear manual selection', 'vistalyze.workshop.btn_clear_bg') : translate('Pick from Gallery', 'vistalyze.workshop.btn_hijack');
     $altBtn.text(altBtnText).prop('disabled', false);
 
     // --- Box 1: Current Background (Left) ---
@@ -87,18 +87,18 @@ export async function renderArchitect() {
 
     // --- Box 2: Proposed Background (Right) ---
     let proposedImgUrl = '';
-    let proposedLabel = translate('vistalyze.workshop.proposed_label');
+    let proposedLabel = translate('Proposed', 'vistalyze.workshop.proposed_label');
 
     if (state._proposedFullBlob) {
         proposedImgUrl = state._proposedFullBlob;
-        proposedLabel = translate('vistalyze.workshop.full_res_label');
+        proposedLabel = translate('Full Resolution', 'vistalyze.workshop.full_res_label');
     } else if (state._proposedImageBlob) {
         proposedImgUrl = state._proposedImageBlob;
-        proposedLabel = translate('vistalyze.workshop.btn_preview');
+        proposedLabel = translate('Thumbnail Preview', 'vistalyze.workshop.btn_preview');
     } else if (draft.customBg && draft.customBg !== live?.customBg) {
         // If a manual background is selected and it differs from the live one, show it as proposed.
         proposedImgUrl = `backgrounds/${encodeURIComponent(draft.customBg)}?v=${Date.now()}`;
-        proposedLabel = translate('vistalyze.workshop.selected_gallery_label');
+        proposedLabel = translate('Selected from Gallery', 'vistalyze.workshop.selected_gallery_label');
     }
 
     $container.html(getArchitectGridHTML(draft, currentImgUrl, proposedImgUrl, proposedLabel));

@@ -77,7 +77,7 @@ export async function openEditModal(def) {
 
         const btn = $(this)
         const originalText = btn.text()
-        btn.prop('disabled', true).text(translate('vistalyze.edit_modal.status_generating'))
+        btn.prop('disabled', true).text(translate('Generating...', 'vistalyze.edit_modal.status_generating'))
         
         try {
             log('Edit', 'Requesting preview for updated visuals.')
