@@ -400,7 +400,7 @@ function bindHandlers() {
     $('#lz-settings').on('change', '#lz-testing-mode', function () {
         const val = $(this).prop('checked');
         updateMetaSetting('testingMode', val);
-        $('.lz-step-run-btn').toggle(val);
+        $('.lz-step-test-row').toggle(val);
     });
 
     $('#lz-settings').on('click', '.lz-step-run-btn', function () {
