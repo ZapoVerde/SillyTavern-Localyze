@@ -156,6 +156,16 @@ export async function detectClassifier(messageText, locationKeys, historyText, p
 }
 
 /**
+ * Sends a pre-built prompt directly to the LLM. Used by the step test modal
+ * so the full interpolated prompt can be inspected and edited before firing.
+ */
+export async function dispatchRaw(prompt, profileId) {
+    return dispatch(prompt, profileId, 'Step Test', { temperature: 0.1 });
+}
+
+export { extractMarkerData };
+
+/**
  * Step 3: Describer.
  */
 export async function detectDescriber(contextText, promptTemplate, profileId) {

@@ -51,6 +51,7 @@ import { escapeHtml } from '../utils/history.js';
 
 import { buildPanelHTML } from '../ui/settings/templates.js';
 import { openPromptModal } from '../ui/settings/promptModal.js';
+import { openStepTestModal } from '../ui/settings/stepTestModal.js';
 import { 
     updateDirtyIndicator, 
     refreshProfileDropdown, 
@@ -164,6 +165,10 @@ function populateInputs() {
 
     $('#lz-verbose-logging').prop('checked', meta.verboseLogging ?? true);
     $('#lz-rerun-badge').prop('checked', meta.rerunBadge ?? false);
+
+    const testingMode = meta.testingMode ?? false;
+    $('#lz-testing-mode').prop('checked', testingMode);
+    $('.lz-step-test-row').toggle(testingMode);
 
     refreshProfileDropdown(meta);
 }
@@ -390,6 +395,16 @@ function bindHandlers() {
         updateMetaSetting('rerunBadge', val);
         const { reinjectAllBadges } = await import('../ui/messageBadge.js');
         reinjectAllBadges();
+    });
+
+    $('#lz-settings').on('change', '#lz-testing-mode', function () {
+        const val = $(this).prop('checked');
+        updateMetaSetting('testingMode', val);
+        $('.lz-step-run-btn').toggle(val);
+    });
+
+    $('#lz-settings').on('click', '.lz-step-run-btn', function () {
+        openStepTestModal($(this).data('step-id'));
     });
 
     $('#lz-settings').on('click', '#lz-audit-btn', async function () {

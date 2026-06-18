@@ -76,6 +76,10 @@ export function buildCallRow(id, label, promptKey, profileKey, historyKey = null
             <div id="lz-profile-test-status-${safeId}" style="margin-top:4px;font-size:0.85em;min-height:1.2em;"></div>
             ${historyRow}
             ${extraContent}
+            <div class="lz-step-test-row" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid var(--SmartThemeBorderColor,#444);">
+                <button class="menu_button lz-step-run-btn" data-step-id="${safeId}"
+                    style="white-space:nowrap;border:1px solid rgba(255,255,255,.2);background:none;">Test Step</button>
+            </div>
         </div>
     </div>`;
 }
@@ -188,6 +192,10 @@ export function buildPanelHTML() {
                             <button class="menu_button" id="lz-img-test">Test Generation</button>
                             <span id="lz-img-test-status" style="opacity:0.65;font-size:0.9em;"></span>
                         </div>
+                        <div class="lz-step-test-row" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid var(--SmartThemeBorderColor,#444);">
+                            <button class="menu_button lz-step-run-btn" data-step-id="image"
+                                style="white-space:nowrap;border:1px solid rgba(255,255,255,.2);background:none;">Test Step</button>
+                        </div>
                     </div>
                 </div>
 
@@ -217,6 +225,13 @@ export function buildPanelHTML() {
                                 <span>Re-run badge</span>
                             </label>
                             <span style="opacity:0.55;">Shows a ? icon on each message to manually re-trigger the full detection pipeline</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:8px;margin-top:4px;">
+                            <label class="checkbox_label" style="cursor:pointer;">
+                                <input type="checkbox" id="lz-testing-mode" />
+                                <span>Testing mode</span>
+                            </label>
+                            <span style="opacity:0.55;">Shows a step test button on each detection step</span>
                         </div>
                     </div>
                 </div>
