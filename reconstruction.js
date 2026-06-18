@@ -42,6 +42,9 @@ export function reconstruct(chat) {
                 // Last write for a given key wins (edit support)
                 // This carries name, description, imagePrompt, and customBg.
                 locations[rec.key] = rec
+            } else if (rec.type === 'location_delete') {
+                // Tombstone: remove the key so deleted locations don't survive reloads
+                delete locations[rec.key]
             } else if (rec.type === 'scene') {
                 transitions.push(rec)
 

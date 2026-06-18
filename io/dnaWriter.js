@@ -101,15 +101,36 @@ export async function lockedPatchSceneImage(messageId, filename) {
 
 /**
  * Writes a location definition to the chat history.
- * @param {number} messageId 
+ * @param {number} messageId
  * @param {object} def { name, key, description, imagePrompt }
- * @param {string} sessionId 
+ * @param {string} sessionId
  */
 export async function lockedWriteLocationDef(messageId, def, sessionId) {
     await writeLock.acquire();
     try {
         // library.js now handles the array-based write
         await writeLocationDef(messageId, def, sessionId);
+    } finally {
+        writeLock.release();
+    }
+}
+
+/**
+ * Writes a location deletion tombstone to the chat history.
+ * Ensures deleted locations do not resurface on reconstruction.
+ * @param {number} messageId
+ * @param {string} key The slug of the deleted location.
+ */
+export async function lockedWriteLocationDelete(messageId, key) {
+    await writeLock.acquire();
+    try {
+        const context = getContext();
+        const message = context.chat[messageId];
+        if (message) {
+            ensureVistalyzeArray(message);
+            message.extra.vistalyze.push({ type: 'location_delete', key });
+            await saveChatConditional();
+        }
     } finally {
         writeLock.release();
     }

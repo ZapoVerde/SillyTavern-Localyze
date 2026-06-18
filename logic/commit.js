@@ -43,6 +43,7 @@ import { generate, uploadBlob } from '../imageCache.js';
 import { set as setBg, clear as clearBg } from '../background.js';
 import {
     lockedWriteLocationDef,
+    lockedWriteLocationDelete,
     lockedWriteSceneRecord,
     lockedPatchSceneImage
 } from '../io/dnaWriter.js';
@@ -98,7 +99,8 @@ async function commitDraftLibrary() {
     for (const key of Object.keys(state.locations)) {
         if (!state._draftLocations[key]) {
             log('Commit', `Removing deleted location: ${key}`);
-            
+            await lockedWriteLocationDelete(safeMsgId, key);
+
             // Protected Update: Delete from local library memory
             removeLocation(key);
         }
