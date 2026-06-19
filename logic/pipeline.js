@@ -173,9 +173,9 @@ async function handleUnknownLocation(messageId, context) {
         key: slugify(rawDef.name)
     };
 
-    // Don't prompt if the user is in the character editor (not viewing chat)
+    // Don't prompt if the user is in the character editor on the first turn
     const charEditorOpen = document.getElementById('rm_ch_create_block')?.offsetParent !== null;
-    if (charEditorOpen) {
+    if (charEditorOpen && messageId === 0) {
         return;
     }
 
