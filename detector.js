@@ -75,7 +75,7 @@ async function dispatch(prompt, profileId, label, extraOptions = {}) {
     if (profileId) {
         try {
             window.loggeryze?.tagNext('VLZ');
-            result = await ConnectionManagerRequestService.sendRequest(profileId, prompt, null, {}, extraOptions);
+            result = await ConnectionManagerRequestService.sendRequest(profileId, prompt, undefined, {}, extraOptions);
         } catch (err) {
             warn(label, `ConnectionManager failed for profile "${profileId}" — falling back to main chat LLM:`, err);
         }

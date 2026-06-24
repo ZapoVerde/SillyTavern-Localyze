@@ -351,7 +351,7 @@ function bindHandlers() {
                 try {
                     profileLabel = ConnectionManagerRequestService.getProfile(profileId)?.name ?? profileId;
                 } catch { /* name lookup is best-effort */ }
-                result = await ConnectionManagerRequestService.sendRequest(profileId, testPrompt, null);
+                result = await ConnectionManagerRequestService.sendRequest(profileId, testPrompt, undefined);
             } else {
                 result = await generateQuietPrompt({ quietPrompt: testPrompt, removeReasoning: true });
             }
